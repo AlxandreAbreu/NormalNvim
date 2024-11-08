@@ -22,10 +22,12 @@ vim.opt.foldlevelstart = 99 -- Start with all code unfolded.
 vim.opt.foldcolumn = "1" -- Show foldcolumn in nvim 0.9+.
 vim.opt.ignorecase = true -- Case insensitive searching.
 vim.opt.infercase = true -- Infer cases in keyword completion.
+vim.opt.smartcase = true -- Case sensitivie searching.
 
 vim.opt.laststatus = 3 -- Global statusline.
 vim.opt.linebreak = true -- Wrap lines at 'breakat'.
 vim.opt.number = true -- Show numberline.
+vim.opt.smartindent = false -- Smarter autoindentation.
 vim.opt.preserveindent = true -- Preserve indent structure as much as possible.
 vim.opt.pumheight = 10 -- Height of the pop up menu.
 vim.opt.relativenumber = true -- Show relative numberline.
@@ -33,8 +35,6 @@ vim.opt.shiftwidth = 2 -- Number of space inserted for indentation.
 vim.opt.showmode = false -- Disable showing modes in command line.
 vim.opt.showtabline = 2 -- always display tabline.
 vim.opt.signcolumn = "yes" -- Always show the sign column.
-vim.opt.smartcase = true -- Case sensitivie searching.
-vim.opt.smartindent = false -- Smarter autoindentation.
 vim.opt.splitbelow = true -- Splitting a new window below the current one.
 vim.opt.splitright = true -- Splitting a new window at the right of the current one.
 vim.opt.tabstop = 2 -- Number of space in a tab.
@@ -66,7 +66,8 @@ if is_android then vim.opt.mouse = "v" else vim.opt.mouse = "a" end -- Enable sc
 
 -- Globals --------------------------------------------------------------------
 vim.g.mapleader = " " -- Set leader key.
-vim.g.maplocalleader = "," -- Set default local leader key.
+-- NOTE: disable localleader for now
+-- vim.g.maplocalleader = "," -- Set default local leader key.
 vim.g.big_file = { size = 1024 * 5000, lines = 50000 } -- For files bigger than this, disable 'treesitter' (+5Mb).
 
 -- The next globals are toggleable with <space + l + u>
