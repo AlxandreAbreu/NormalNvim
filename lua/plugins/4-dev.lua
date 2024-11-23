@@ -619,7 +619,7 @@ return {
       --   },
       -- }
 
-      -- TODO: Disable and enable chromium instead
+      -- TODO: Disable and enable debugging with chromium instead
       -- Javascript / Typescript (firefox)
       dap.adapters.firefox = {
         type = 'executable',
