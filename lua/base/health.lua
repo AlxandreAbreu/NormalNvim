@@ -114,67 +114,68 @@ function M.check()
       type = "warn",
       msg = "Used to run python tests (Optional)",
     },
-    {
-      cmd = { "cargo nextest" },
-      type = "warn",
-      msg = "Used to run rust tests (optional)\nNOTE: checkhealth won't detect this correctly, but you can confirm it works correctly with 'cargo nextest'.",
-    },
-    {
-      cmd = { "nunit" },
-      type = "warn",
-      msg = "Used to run C# tests (optional)\nNOTE: There is no way to install this system wide. To use it you must add it to your dotnet C# project: 'dotnet add package NUnit NUnit3TestAdapter'.",
-    },
-    {
-      cmd = { "csc" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile non dotnet C# files (Optional)",
-    },
-    {
-      cmd = { "mono" },
-      type = "warn",
-      msg = "Used by compiler.nvim to run non dotnet C# files. (Optional)",
-    },
-    {
-      cmd = { "dotnet" },
-      type = "warn",
-      msg = "Used by compiler.nvim and DAP to operate with dotnet projects (optional)\nNOTE: Make sure you also have the system package dotnet-sdk installed.",
-    },
-    {
-      cmd = { "java" },
-      type = "warn",
-      msg = "Used by compiler.nvim and dap to operate with java (Optional)",
-    },
-    {
-      cmd = { "javac" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile java (Optional)",
-    },
-    {
-      cmd = { "nasm" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile assembly x86_64 (Optional)",
-    },
+
+    -- {
+    --   cmd = { "cargo nextest" },
+    --   type = "warn",
+    --   msg = "Used to run rust tests (optional)\nNOTE: checkhealth won't detect this correctly, but you can confirm it works correctly with 'cargo nextest'.",
+    -- },
+    -- {
+    --   cmd = { "nunit" },
+    --   type = "warn",
+    --   msg = "Used to run C# tests (optional)\nNOTE: There is no way to install this system wide. To use it you must add it to your dotnet C# project: 'dotnet add package NUnit NUnit3TestAdapter'.",
+    -- },
+    -- {
+    --   cmd = { "csc" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile non dotnet C# files (Optional)",
+    -- },
+    -- {
+    --   cmd = { "mono" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to run non dotnet C# files. (Optional)",
+    -- },
+    -- {
+    --   cmd = { "dotnet" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim and DAP to operate with dotnet projects (optional)\nNOTE: Make sure you also have the system package dotnet-sdk installed.",
+    -- },
+    -- {
+    --   cmd = { "java" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim and dap to operate with java (Optional)",
+    -- },
+    -- {
+    --   cmd = { "javac" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile java (Optional)",
+    -- },
+    -- {
+    --   cmd = { "nasm" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile assembly x86_64 (Optional)",
+    -- },
 
     {
       cmd = { "gcc" },
       type = "warn",
       msg = "Used by compiler.nvim to compile C (Optional)",
     },
-    {
-      cmd = { "g++" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile C++ (Optional)",
-    },
-    {
-      cmd = { "elixir" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile elixir (optional)",
-    },
-    {
-      cmd = { "Rscript" },
-      type = "warn",
-      msg = "Used by compiler.nvim to interpretate R (Optional)",
-    },
+    -- {
+    --   cmd = { "g++" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile C++ (Optional)",
+    -- },
+    -- {
+    --   cmd = { "elixir" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile elixir (optional)",
+    -- },
+    -- {
+    --   cmd = { "Rscript" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to interpretate R (Optional)",
+    -- },
     {
       cmd = { "python" },
       type = "warn",
@@ -200,36 +201,36 @@ function M.check()
       type = "warn",
       msg = "Used by compiler.nvim to interpretate perl (optional)",
     },
-    {
-      cmd = { "swiftc" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile swift (optional)",
-    },
-    {
-      cmd = { "swift" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile swift (optional)",
-    },
-    {
-      cmd = { "gfortran" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile fortran (optional)",
-    },
-    {
-      cmd = { "fpm" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile fortran (optional)",
-    },
-    {
-      cmd = { "go" },
-      type = "warn",
-      msg = "Used by compiler.nvim to compile go (optional)",
-    },
-    {
-      cmd = { "godoc" },
-      type = "warn",
-      msg = "Used by dooku.nvim to generate go html docs\nNOTE: If you have it installed but you can't run it on the terminal, ensure you have added 'go' to your OS path (optional)",
-    },
+    -- {
+    --   cmd = { "swiftc" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile swift (optional)",
+    -- },
+    -- {
+    --   cmd = { "swift" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile swift (optional)",
+    -- },
+    -- {
+    --   cmd = { "gfortran" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile fortran (optional)",
+    -- },
+    -- {
+    --   cmd = { "fpm" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile fortran (optional)",
+    -- },
+    -- {
+    --   cmd = { "go" },
+    --   type = "warn",
+    --   msg = "Used by compiler.nvim to compile go (optional)",
+    -- },
+    -- {
+    --   cmd = { "godoc" },
+    --   type = "warn",
+    --   msg = "Used by dooku.nvim to generate go html docs\nNOTE: If you have it installed but you can't run it on the terminal, ensure you have added 'go' to your OS path (optional)",
+    -- },
     {
       cmd = { "doxygen" },
       type = "warn",

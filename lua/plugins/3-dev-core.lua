@@ -384,14 +384,12 @@ return {
         { path = "zen-mode.nvim", mods = { "zen-mode" } },
         { path = "vim-suda", mods = { "suda" } }, -- has vimscript
         { path = "vim-matchup", mods = { "matchup", "match-up", "treesitter-matchup" } }, -- has vimscript
-        -- TODO: delete hop
-        -- { path = "hop.nvim", mods = { "hop", "hop-treesitter", "hop-yank" } },
         { path = "nvim-autopairs", mods = { "nvim-autopairs" } },
         { path = "lsp_signature", mods = { "lsp_signature" } },
         { path = "nvim-lightbulb", mods = { "nvim-lightbulb" } },
         { path = "hot-reload.nvim", mods = { "hot-reload" } },
         { path = "distroupdate.nvim", mods = { "distroupdate" } },
-
+        -- TODO: Add flash to lazydev
         { path = "tokyonight.nvim", mods = { "tokyonight" } },
         { path = "astrotheme", mods = { "astrotheme" } },
         { path = "alpha-nvim", mods = { "alpha" } },

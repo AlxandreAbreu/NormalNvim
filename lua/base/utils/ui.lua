@@ -69,17 +69,18 @@ function M.set_indent()
   end
 end
 
+--- TODO: delete mini-animate reference
 --- Toggle animations
-function M.toggle_animations()
-  if vim.g.minianimate_disable then
-    vim.g.minianimate_disable = false
-  else
-    vim.g.minianimate_disable = true
-  end
-
-  local state = vim.g.minianimate_disable
-  utils.notify(string.format("animations %s", bool2str(not state)))
-end
+-- function M.toggle_animations()
+--   if vim.g.minianimate_disable then
+--     vim.g.minianimate_disable = false
+--   else
+--     vim.g.minianimate_disable = true
+--   end
+--
+--   local state = vim.g.minianimate_disable
+--   utils.notify(string.format("animations %s", bool2str(not state)))
+-- end
 
 --- Toggle auto format
 function M.toggle_autoformat()
