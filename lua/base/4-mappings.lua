@@ -59,7 +59,7 @@ local get_icon = utils.get_icon
 local is_available = utils.is_available
 local ui = require("base.utils.ui")
 local maps = require("base.utils").get_mappings_template()
-local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
+-- local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
 -- -------------------------------------------------------------------------
 --
@@ -99,28 +99,26 @@ maps.n["<leader>n"] = { "<cmd>enew<cr>", desc = "New file" }
 
 -- commenting
 -- TODO: change binding
-maps.n["<Leader>/"] = { "gcc", remap = true, desc = "Toggle comment line" }
-maps.x["<Leader>/"] = { "gc", remap = true, desc = "Toggle comment" }
+maps.n["<Leader>/"] = { "gcc", remap = true, desc = " Toggle comment line" }
+maps.x["<Leader>/"] = { "gc", remap = true, desc = " Toggle comment" }
 
 -- FIX: gc conflict. Run checkhealth which-key
-maps.n["gca"] = { "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = "Add comment above" }
-maps.n["gco"] = { "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = "Add comment below" }
+maps.n["gca"] = { "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = " Add comment above" }
+maps.n["gco"] = { "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = " Add comment below" }
 
 -- Move Lines
-maps.n["<A-j>"] = { "<cmd>execute 'move .+' . v:count1<cr>==", desc = "Move down" }
-maps.n["<A-k>"] = { "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", desc = "Move up" }
-maps.i["<A-j>"] = { "<esc><cmd>m .+1<cr>==gi", desc = "Move Down" }
-maps.i["<A-k>"] = { "<esc><cmd>m .-2<cr>==gi", desc = "Move Up" }
-maps.v["<A-j>"] = { ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", desc = "Move down" }
-maps.v["<A-k>"] = { ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", desc = "Move up" }
+maps.n["<A-j>"] = { "<cmd>execute 'move .+' . v:count1<cr>==", desc = "Move line down" }
+maps.n["<A-k>"] = { "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", desc = "Move line up" }
+maps.i["<A-j>"] = { "<esc><cmd>m .+1<cr>==gi", desc = "Move line down" }
+maps.i["<A-k>"] = { "<esc><cmd>m .-2<cr>==gi", desc = "Move line up" }
+maps.v["<A-j>"] = { ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", desc = "Move line down" }
+maps.v["<A-k>"] = { ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", desc = "Move line up" }
 
 -- FIX:
 -- maps.n["gx"] =
 -- { utils.open_with_program, desc = "Open the file under cursor with a program" }
 
 maps.n["<C-s>"] = { "<cmd>w!<cr>", desc = "Force write" }
-maps.n["|"] = { "<cmd>vsplit<cr>", desc = "Vertical split" }
-maps.n["_"] = { "<cmd>split<cr>", desc = "Horizontal split" }
 maps.i["<C-BS>"] = { "<C-W>", desc = "Enable CTRL+backsace to delete" }
 maps.n["0"] =
 { "^", desc = "Go to the fist character of the line" }
@@ -153,9 +151,104 @@ maps.n["<kDown>"] = { "Gzz", desc = "Go to bottom of page" }
 maps.n["<kLeft>"] = { "^", desc = "Go to first non blank character in line" }
 maps.n["<kRight>"] = { "$", desc = "Go to last character in line" }
 
--- Quit Neovim
-maps.n["<leader>q"] = { "<cmd>confirm q<cr>", desc = "Quit" }
-maps.n["<leader>q"] = {
+-- NOTE: WINDOWS/SPLITS
+
+maps.n["ç"] = { "<cmd>wincmd w<cr>", desc = "Switch between windows" }
+
+maps.n["<leader>k"] = { -- Close window and buffer at the same time.
+  function() require("heirline-components.buffer").wipe() end,
+  desc = " Wipe buffer",
+}
+maps.n["<leader>c"] = { -- Close buffer keeping the window.
+  function() require("heirline-components.buffer").close() end,
+  desc = " Close buffer",
+}
+maps.n["<leader>bw"] = {     -- Closes the window
+  function()
+    vim.cmd("silent! close") -- Be aware you can't close the last window
+  end,
+  desc = " Close window",
+}
+
+-- TODO:
+-- Close buffer keeping the window → Without confirmation.
+-- maps.n["<leader>X"] = {
+--   function() require("heirline-components.buffer").close(0, true) end,
+--   desc = "Force close buffer",
+
+-- Split the window
+maps.n["|"] = { "<cmd>vsplit<cr>", desc = " Split window vertically " }
+maps.n["_"] = { "<cmd>split<cr>", desc = " Split window horizontally" }
+
+-- Pick which window to split
+maps.n["<leader>b-"] = {
+  function()
+    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
+      vim.cmd.split()
+      vim.api.nvim_win_set_buf(0, bufnr)
+    end)
+  end,
+  desc = " Split buffer horizontal from tabline",
+}
+maps.n["<leader>b|"] = {
+  function()
+    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
+      vim.cmd.vsplit()
+      vim.api.nvim_win_set_buf(0, bufnr)
+    end)
+  end,
+  desc = " Split buffer vertically from tabline",
+}
+
+-- smart-splits.nvim
+if is_available("smart-splits.nvim") then
+  maps.n["<C-h>"] = {
+    function() require("smart-splits").move_cursor_left() end,
+    desc = " Move to left split",
+  }
+  maps.n["<C-j>"] = {
+    function() require("smart-splits").move_cursor_down() end,
+    desc = "Move to below split",
+  }
+  maps.n["<C-k>"] = {
+    function() require("smart-splits").move_cursor_up() end,
+    desc = "Move to above split",
+  }
+  maps.n["<C-l>"] = {
+    function() require("smart-splits").move_cursor_right() end,
+    desc = " Move to right split",
+  }
+  maps.n["<C-Up>"] = {
+    function() require("smart-splits").resize_up() end,
+    desc = "Resize split up",
+  }
+  maps.n["<C-Down>"] = {
+    function() require("smart-splits").resize_down() end,
+    desc = "Resize split down",
+  }
+  maps.n["<C-Left>"] = {
+    function() require("smart-splits").resize_left() end,
+    desc = "Resize split left",
+  }
+  maps.n["<C-Right>"] = {
+    function() require("smart-splits").resize_right() end,
+    desc = "Resize split right",
+  }
+else
+  maps.n["<C-h>"] = { "<C-w>h", desc = " Move to left split" }
+  maps.n["<C-j>"] = { "<C-w>j", desc = "Move to below split" }
+  maps.n["<C-k>"] = { "<C-w>k", desc = "Move to above split" }
+  maps.n["<C-l>"] = { "<C-w>l", desc = " Move to right split" }
+  maps.n["<C-Up>"] = { "<cmd>resize -2<cr>", desc = "Resize split up" }
+  maps.n["<C-Down>"] = { "<cmd>resize +2<cr>", desc = "Resize split down" }
+  maps.n["<C-Left>"] =
+  { "<cmd>vertical resize -2<cr>", desc = "Resize split left" }
+  maps.n["<C-Right>"] =
+  { "<cmd>vertical resize +2<cr>", desc = "Resize split right" }
+end
+
+-- NOTE: QUIT NEOVIM
+maps.n["<leader>qq"] = {
   function()
     -- Ask user for confirmation
     local choice = vim.fn.confirm("Do you really want to exit nvim?", "&Yes\n&No", 2)
@@ -164,8 +257,12 @@ maps.n["<leader>q"] = {
       vim.cmd('confirm quit')
     end
   end,
-  desc = "Quit",
+  desc = " Quit Neovim",
 }
+
+maps.n["<leader>qf"] = { "<cmd>qall<cr>", desc = " Quit Neovim" }
+maps.n["<leader>qs"] = { "<cmd>wqa<cr>", desc = "󰆔 Save all files and quit" }
+
 maps.n["<Tab>"] = {
   "<Tab>",
   noremap = true,
@@ -176,16 +273,14 @@ maps.n["<Tab>"] = {
 
 -- NOTE: CLIPBOARD
 
--- BUG: We disable these mappings on termux by default because <C-y>
---      is the keycode for scrolling, and remapping it would break it.
-if not is_android then
-  -- only useful when the option clipboard is commented on ./1-options.lua
-  maps.n["<C-y>"] = { '"+y<esc>', desc = "Copy to cliboard" }
-  maps.x["<C-y>"] = { '"+y<esc>', desc = "Copy to cliboard" }
-  maps.n["<C-d>"] = { '"+y<esc>dd', desc = "Copy to clipboard and delete line" }
-  maps.x["<C-d>"] = { '"+y<esc>dd', desc = "Copy to clipboard and delete line" }
-  maps.n["<C-p>"] = { '"+p<esc>', desc = "Paste from clipboard" }
-end
+-- only useful when the option clipboard is commented on ./1-options.lua
+maps.n["<C-y>"] = { '"+y<esc>', desc = "Copy to cliboard" }
+maps.x["<C-y>"] = { '"+y<esc>', desc = "Copy to cliboard" }
+maps.n["<C-d>"] = { '"+y<esc>dd', desc = "Copy to clipboard and delete line" }
+maps.x["<C-d>"] = { '"+y<esc>dd', desc = "Copy to clipboard and delete line" }
+maps.n["<C-p>"] = { '"+p<esc>', desc = "Paste from clipboard in normal mode" }
+
+vim.api.nvim_set_keymap('i', '<C-v>', '<C-r>+', {  desc = "Paste from clipboard in insert mode", noremap = true, silent = true })
 
 -- Make 'c' key not copy to clipboard when changing a character.
 maps.n["c"] = { '"_c', desc = "Change without yanking" }
@@ -234,10 +329,29 @@ maps.n["X"] = {
 maps.x["X"] = { '"_X', desc = "Delete all characters in line" }
 
 -- Override nvim default behavior so it doesn't auto-yank when pasting on visual mode.
-maps.x["p"] = { "P", desc = "Paste content you've previourly yanked" }
-maps.x["P"] = { "p", desc = "Yank what you are going to override, then paste" }
+maps.x["p"] = { "P", desc = "Paste previously yanked content" }
+maps.x["P"] = { "p", desc = "Yank what we want to override, then paste" }
 
--- search highlighting ------------------------------------------------------
+-- NOTE:
+-- TODO:
+-- set other keybindings
+-- if vim.g.neovide then
+  -- map('n', '<C-s>', ':w<CR>') -- Save
+  -- map('v', '<C-c>', '"+y') -- Copy
+  -- map('n', '<C-v>', '"+P') -- Paste normal mode
+  -- map('v', '<C-v>', '"+P') -- Paste visual mode
+  -- map('c', '<C-v>', '<C-R>+') -- Paste command mode
+-- end
+
+
+-- TODO:
+-- set other keybindings
+-- Allow clipboard copy paste in neovim
+-- vim.api.nvim_set_keymap('',  '<C-v>', '+p<CR>', { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('t', '<C-v>', '<C-R>+', { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('v', '<C-v>', '<C-R>+', { noremap = true, silent = true})
+
+-- search highlighting
 -- use ESC to clear hlsearch, while preserving its original functionality.
 --
 -- TIP: If you prefer,  use <leader>ENTER instead of <ESC>
@@ -325,161 +439,129 @@ maps.n["<C-a>"] = { -- to move to the previous position press ctrl + oo
 -- lazy
 maps.n["<leader>p"] = icons.p
 maps.n["<leader>pu"] =
-{ function() require("lazy").check() end, desc = "Lazy open" }
+{ function() require("lazy").check() end, desc = "󰒲 Open Lazy" }
 maps.n["<leader>pU"] =
-{ function() require("lazy").update() end, desc = "Lazy update" }
+{ function() require("lazy").update() end, desc = " Update Lazy" }
 
 -- mason
 if is_available("mason.nvim") then
-  maps.n["<leader>pm"] = { "<cmd>Mason<cr>", desc = "Mason open" }
-  maps.n["<leader>pM"] = { "<cmd>MasonUpdateAll<cr>", desc = "Mason update" }
+  maps.n["<leader>pm"] = { "<cmd>Mason<cr>", desc = " Open Mason " }
+  maps.n["<leader>pM"] = { "<cmd>MasonUpdateAll<cr>", desc = " Update Mason" }
 end
 
 -- treesitter
 if is_available("nvim-treesitter") then
-  maps.n["<leader>pT"] = { "<cmd>TSUpdate<cr>", desc = "Treesitter update" }
-  maps.n["<leader>pt"] = { "<cmd>TSInstallInfo<cr>", desc = "Treesitter open" }
+  maps.n["<leader>pT"] = { "<cmd>TSUpdate<cr>", desc = " Update Treesitter" }
+  maps.n["<leader>pt"] = { "<cmd>TSInstallInfo<cr>", desc = " Open Treesitter" }
 end
 
 -- nvim updater
-maps.n["<leader>pD"] = { "<cmd>DistroUpdate<cr>", desc = "Distro update" }
-maps.n["<leader>pv"] = { "<cmd>DistroReadVersion<cr>", desc = "Distro version" }
-maps.n["<leader>pc"] = { "<cmd>DistroReadChangelog<cr>", desc = "Distro changelog" }
+maps.n["<leader>pD"] = { "<cmd>DistroUpdate<cr>", desc = " Update the distro" }
+maps.n["<leader>pv"] = { "<cmd>DistroReadVersion<cr>", desc = " Check the distro version" }
+maps.n["<leader>pc"] = { "<cmd>DistroReadChangelog<cr>", desc = " Read the distro changelog" }
 
 -- NOTE: buffers/tabs [buffers ]
-maps.n["<leader>k"] = { -- Close window and buffer at the same time.
-  function() require("heirline-components.buffer").wipe() end,
-  desc = "Wipe buffer",
-}
-maps.n["<leader>c"] = { -- Close buffer keeping the window.
-  function() require("heirline-components.buffer").close() end,
-  desc = "Close buffer",
-}
-maps.n["<leader>bw"] = {     -- Closes the window
-  function()
-    vim.cmd("silent! close") -- Be aware you can't close the last window
-  end,
-  desc = "Close window",
-}
--- Close buffer keeping the window → Without confirmation.
--- maps.n["<leader>X"] = {
---   function() require("heirline-components.buffer").close(0, true) end,
---   desc = "Force close buffer",
---
+
 maps.n["<leader>ba"] = {
   function() vim.cmd("wa") end,
-  desc = "Write all changed buffers",
+  desc = "󰆔 Write all changed buffers",
 }
 maps.n["º"] = {
   function()
     require("heirline-components.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
   end,
-  desc = "Next buffer",
+  desc = " Next buffer",
 }
 maps.n["+"] = {
   function()
     require("heirline-components.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
   end,
-  desc = "Previous buffer",
+  desc = " Previous buffer",
 }
 maps.n[">b"] = {
   function()
     require("heirline-components.buffer").move(vim.v.count > 0 and vim.v.count or 1)
   end,
-  desc = "Move buffer tab right",
+  desc = " Move buffer tab right",
 }
 maps.n["<b"] = {
   function()
     require("heirline-components.buffer").move(-(vim.v.count > 0 and vim.v.count or 1))
   end,
-  desc = "Move buffer tab left",
+  desc = " Move buffer tab left",
 }
 
-maps.n["+"] = { "<cmd>bprevious<cr>", desc = "Go to previous buffer" }
-maps.n["-"] = { "<cmd>b#<cr>", desc = "Toggle with the last buffer" }
-maps.n["<Tab>"] = { "<cmd>b#<cr>", desc = "Toggle with the last buffer" }
-maps.n["gb"] = { "<cmd>bprevious<cr>", desc = "Go to previous buffer" }
-maps.n["gl"] = { "<cmd>b#<cr>", desc = "Toggle with the last buffer" }
+maps.n["+"] = { "<cmd>bprevious<cr>", desc = " Go to previous buffer" }
+maps.n["-"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
+maps.n["<Tab>"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
+maps.n["gb"] = { "<cmd>bprevious<cr>", desc = " Go to previous buffer" }
+maps.n["gl"] = { "<cmd>b#<cr>", desc = " Toggle with the last buffer" }
 
 -- FIX: huge delay. see commands/keymaps
-maps.n["gn"] = { "<cmd>bnext<cr>", desc = "Go to next buffer" }
+-- Lags because gnn is bound to "Start selecting nodes with nvim-treesitter"
+maps.n["gn"] = { "<cmd>bnext<cr>", desc = " Go to next buffer" }
+-- maps.n["gn"] = { "<cmd>bnext<cr>", desc = "  Go to next buffer", noremap = true }
+-- :map gn
+-- :map gnn
+-- See: nvim-treesitter/incremental_selection.lua
 
-maps.n["gt"] = { "<cmd>tabp<cr>", desc = "Go to previous tab" }
-maps.n["gy"] = { "<cmd>tabn<cr>", desc = "Go to next tab" }
-maps.n["º"] = { "<cmd>bnext<cr>", desc = "Go to next buffer" }
-maps.n["ç"] = { "<cmd>wincmd w<cr>", desc = "Switch between windows" }
+maps.n["gt"] = { "<cmd>tabp<cr>", desc = " Go to previous tab" }
+maps.n["gy"] = { "<cmd>tabn<cr>", desc = " Go to next tab" }
+maps.n["º"] = { "<cmd>bnext<cr>", desc = " Go to next buffer" }
 
 maps.n["<leader>b"] = icons.b
 maps.n["<leader>bc"] = {
   function() require("heirline-components.buffer").close_all(true) end,
-  desc = "Close all buffers except current",
+  desc = " Close all buffers except current",
 }
 maps.n["<leader>bC"] = {
   function() require("heirline-components.buffer").close_all() end,
-  desc = "Close all buffers",
+  desc = " Close all buffers",
 }
-maps.n["<leader>bb"] = {
+maps.n["<leader>v"] = {
   function()
     require("heirline-components.all").heirline.buffer_picker(
       function(bufnr) vim.api.nvim_win_set_buf(0, bufnr) end
     )
   end,
-  desc = "Select buffer from tabline",
+  desc = " Select buffer from tabline",
 }
-maps.n["<leader>bd"] = {
+maps.n["<leader>r"] = {
   function()
     require("heirline-components.all").heirline.buffer_picker(
       function(bufnr) require("heirline-components.buffer").close(bufnr) end
     )
   end,
-  desc = "Delete buffer from tabline",
+  desc = "󰆤 Delete buffer from tabline",
 }
 maps.n["<leader>bl"] = {
   function() require("heirline-components.buffer").close_left() end,
-  desc = "Close all buffers to the left",
+  desc = " Close all buffers to the left",
 }
 maps.n["<leader>br"] = {
   function() require("heirline-components.buffer").close_right() end,
-  desc = "Close all buffers to the right",
+  desc = " Close all buffers to the right",
 }
 maps.n["<leader>bs"] = icons.bs
 maps.n["<leader>bse"] = {
   function() require("heirline-components.buffer").sort "extension" end,
-  desc = "Sort by extension (buffers)",
+  desc = " Sort by extension (buffers)",
 }
 maps.n["<leader>bsr"] = {
   function() require("heirline-components.buffer").sort "unique_path" end,
-  desc = "Sort by relative path (buffers)",
+  desc = " Sort by relative path (buffers)",
 }
 maps.n["<leader>bsp"] = {
   function() require("heirline-components.buffer").sort "full_path" end,
-  desc = "Sort by full path (buffers)",
+  desc = " Sort by full path (buffers)",
 }
 maps.n["<leader>bsi"] = {
   function() require("heirline-components.buffer").sort "bufnr" end,
-  desc = "Sort by buffer number (buffers)",
+  desc = " Sort by buffer number (buffers)",
 }
 maps.n["<leader>bsm"] = {
   function() require("heirline-components.buffer").sort "modified" end,
-  desc = "Sort by modification (buffers)",
-}
-maps.n["<leader>b\\"] = {
-  function()
-    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
-      vim.cmd.split()
-      vim.api.nvim_win_set_buf(0, bufnr)
-    end)
-  end,
-  desc = "Horizontal split buffer from tabline",
-}
-maps.n["<leader>b|"] = {
-  function()
-    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
-      vim.cmd.vsplit()
-      vim.api.nvim_win_set_buf(0, bufnr)
-    end)
-  end,
-  desc = "Vertical split buffer from tabline",
+  desc = " Sort by modification (buffers)",
 }
 
 -- quick movement aliases
@@ -511,7 +593,7 @@ maps.n["[t"] = { function() vim.cmd.tabprevious() end, desc = "Previous tab" }
 -- zen mode
 if is_available("zen-mode.nvim") then
   maps.n["<leader>uz"] =
-  { function() ui.toggle_zen_mode() end, desc = "Zen mode" }
+  { function() ui.toggle_zen_mode() end, desc = " Zen mode" }
 end
 
 -- ui toggles [ui] ---------------------------------------------------------
@@ -763,90 +845,43 @@ if is_available("neovim-session-manager") then
   maps.n["<leader>s"] = icons.S
   maps.n["<leader>sl"] = {
     "<cmd>SessionManager! load_last_session<cr>",
-    desc = "Load last session",
+    desc = " Load last session",
   }
   maps.n["<leader>ss"] = {
     "<cmd>SessionManager! save_current_session<cr>",
-    desc = "Save this session",
+    desc = " Save this session",
   }
   maps.n["<leader>sd"] =
-  { "<cmd>SessionManager! delete_session<cr>", desc = "Delete session" }
+  { "<cmd>SessionManager! delete_session<cr>", desc = " Delete session" }
   maps.n["<leader>sf"] =
-  { "<cmd>SessionManager! load_session<cr>", desc = "Search sessions" }
+  { "<cmd>SessionManager! load_session<cr>", desc = " Search sessions" }
   maps.n["<leader>s."] = {
     "<cmd>SessionManager! load_current_dir_session<cr>",
-    desc = "Load current directory session",
+    desc = " Load current directory session",
   }
 end
 if is_available("resession.nvim") then
   maps.n["<leader>s"] = icons.S
   maps.n["<leader>sl"] = {
     function() require("resession").load "Last Session" end,
-    desc = "Load last session",
+    desc = " Load last session",
   }
   maps.n["<leader>ss"] =
-  { function() require("resession").save() end, desc = "Save this session" }
+  { function() require("resession").save() end, desc = " Save this session" }
   maps.n["<leader>st"] = {
     function() require("resession").save_tab() end,
-    desc = "Save this tab's session",
+    desc = " Save this tab's session",
   }
   maps.n["<leader>sd"] =
-  { function() require("resession").delete() end, desc = "Delete a session" }
+  { function() require("resession").delete() end, desc = " Delete a session" }
   maps.n["<leader>sf"] =
-  { function() require("resession").load() end, desc = "Load a session" }
+  { function() require("resession").load() end, desc = " Load a session" }
   maps.n["<leader>s."] = {
     function()
       require("resession").load(vim.fn.getcwd(), { dir = "dirsession" })
     end,
-    desc = "Load current directory session",
+    desc = " Load current directory session",
   }
-end
-
--- smart-splits.nvim
-if is_available("smart-splits.nvim") then
-  maps.n["<C-h>"] = {
-    function() require("smart-splits").move_cursor_left() end,
-    desc = "Move to left split",
-  }
-  maps.n["<C-j>"] = {
-    function() require("smart-splits").move_cursor_down() end,
-    desc = "Move to below split",
-  }
-  maps.n["<C-k>"] = {
-    function() require("smart-splits").move_cursor_up() end,
-    desc = "Move to above split",
-  }
-  maps.n["<C-l>"] = {
-    function() require("smart-splits").move_cursor_right() end,
-    desc = "Move to right split",
-  }
-  maps.n["<C-Up>"] = {
-    function() require("smart-splits").resize_up() end,
-    desc = "Resize split up",
-  }
-  maps.n["<C-Down>"] = {
-    function() require("smart-splits").resize_down() end,
-    desc = "Resize split down",
-  }
-  maps.n["<C-Left>"] = {
-    function() require("smart-splits").resize_left() end,
-    desc = "Resize split left",
-  }
-  maps.n["<C-Right>"] = {
-    function() require("smart-splits").resize_right() end,
-    desc = "Resize split right",
-  }
-else
-  maps.n["<C-h>"] = { "<C-w>h", desc = "Move to left split" }
-  maps.n["<C-j>"] = { "<C-w>j", desc = "Move to below split" }
-  maps.n["<C-k>"] = { "<C-w>k", desc = "Move to above split" }
-  maps.n["<C-l>"] = { "<C-w>l", desc = "Move to right split" }
-  maps.n["<C-Up>"] = { "<cmd>resize -2<CR>", desc = "Resize split up" }
-  maps.n["<C-Down>"] = { "<cmd>resize +2<CR>", desc = "Resize split down" }
-  maps.n["<C-Left>"] =
-  { "<cmd>vertical resize -2<CR>", desc = "Resize split left" }
-  maps.n["<C-Right>"] =
-  { "<cmd>vertical resize +2<CR>", desc = "Resize split right" }
 end
 
 -- aerial.nvimm ------------------------------------------------------------
@@ -1152,6 +1187,7 @@ maps.t["<C-k>"] =
 maps.t["<C-l>"] =
 { "<cmd>wincmd l<cr>", desc = "Terminal right window navigation" }
 
+
 -- dap.nvim [debugger] -----------------------------------------------------
 -- Depending your terminal some F keys may not work. To fix it:
 -- modified function keys found with `showkey -a` in the terminal to get key code
@@ -1382,7 +1418,7 @@ end
 
 -- [neural] -----------------------------------------------------------------
 if is_available("neural") or is_available("copilot") then
-  maps.n["<leader>a"] = {
+  maps.n["<F2>"] = {
     function() require("neural").prompt() end,
     desc = "Ask chatgpt",
   }
@@ -1721,6 +1757,10 @@ if is_autoformat_enabled and is_filetype_allowed and is_filetype_ignored then
 
   return lsp_mappings
 end
+
+-- NOTE: ACTIONS
+maps.n["<leader>a"] = icons.b
+
 
 utils.set_mappings(maps)
 return M

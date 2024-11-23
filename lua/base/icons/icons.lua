@@ -27,7 +27,7 @@ return {
   Debugger = "",
   Run = "󰑮",
   Find = "",
-  Session = "󱂬",
+  Session = "", --"󱂬"
   Sort = "󰒺",
   Buffer = "󰓩",
   Terminal = "",
