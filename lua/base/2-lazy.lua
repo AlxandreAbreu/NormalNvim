@@ -1,4 +1,7 @@
+-- NOTE:
 -- Lazy.nvim config file.
+-- https://lazy.folke.io/
+-- https://lazy.folke.io/configuration
 
 -- DESCRIPTION:
 -- Use this file to configure the way you get updates.
@@ -85,6 +88,22 @@ local function setup_lazy(lazy_dir)
   require("lazy").setup({
     spec = spec,
     defaults = { lazy = true },
+    install = {
+      colorscheme = { "tokyonight-night" },
+    },
+    checker = {
+      -- automatically check for plugin updates
+      enabled = false,
+      notify = false, -- get a notification when new updates are found
+    },
+    change_detection = {
+      -- automatically check for config file changes and reload the ui
+      enabled = true,
+      notify = false, -- get a notification when changes are found
+    },
+    ui = {
+      border = "rounded",
+    },
     performance = {
       rtp = { -- Disable unnecessary nvim features to speed up startup.
         disabled_plugins = {
