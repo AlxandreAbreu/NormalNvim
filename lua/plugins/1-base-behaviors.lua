@@ -18,7 +18,7 @@
 --       -> zen-mode.nvim          [distraction free mode]
 --       -> suda.vim               [write as sudo]
 --       -> vim-matchup            [Improved % motion]
---       -> hop.nvim               [go to word visually]
+--       -> flash                  [go to word visually]
 --       -> nvim-autopairs         [auto close brackets]
 --       -> nvim-ts-autotag        [auto close html tags]
 --       -> lsp_signature.nvim     [auto params help]
@@ -559,12 +559,45 @@ return {
     end,
   },
 
-  --  hop.nvim [go to word visually]
-  --  https://github.com/smoka7/hop.nvim
+  -- NOTE: FLASH
+  -- https://github.com/folke/flash.nvim
+  -- https://www.lazyvim.org/plugins/editor#flashnvim
   {
-    "smoka7/hop.nvim",
-    cmd = { "HopWord" },
-    opts = { keys = "etovxqpdygfblzhckisuran" }
+    "folke/flash.nvim",
+    cmd = "Flash",
+    vscode = true,
+    ---@type Flash.Config
+    opts = {
+      labels = "asdfghjklqwertyuiopzxcvbnm",
+      jump = {
+        -- automatically jump when there is only one match
+        autojump = true,
+      },
+      modes = {
+        char = {
+          jump_labels = true,
+        },
+      },
+    },
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+      {
+        "<leader>j", mode = { "n" },
+        function()
+          require("flash").jump({
+            search = { mode = "search", max_length = 0 },
+            label = { after = { 0, 0 } },
+            pattern = "^"
+          })
+        end,
+        desc = "Jump to a line in buffer"
+      },
+    },
   },
 
   --  nvim-autopairs [auto close brackets]
