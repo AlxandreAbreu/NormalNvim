@@ -33,7 +33,6 @@
 --       -> nvim-ufo
 --       -> code documentation                 [docs]
 --       -> ask chatgpt                        [neural]
---       -> hop.nvim
 --       -> mason-lspconfig.nvim               [lsp]
 
 --
