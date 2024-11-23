@@ -85,6 +85,9 @@ local icons = {
   t = { desc = get_icon("Terminal", true) .. " Terminal" },
 }
 
+-- NOTE:
+-- maps.n["<Tab>"] = {  ':b#<cr>', { desc = 'Toggle with the last buffer', noremap = true, silent = true })
+
 -- standard Operations -----------------------------------------------------
 maps.n["j"] =
 { "v:count == 0 ? 'gj' : 'j'", expr = true, desc = "Move cursor down" }
@@ -287,7 +290,7 @@ maps.n["<leader>pD"] = { "<cmd>DistroUpdate<cr>", desc = "Distro update" }
 maps.n["<leader>pv"] = { "<cmd>DistroReadVersion<cr>", desc = "Distro version" }
 maps.n["<leader>pc"] = { "<cmd>DistroReadChangelog<cr>", desc = "Distro changelog" }
 
--- buffers/tabs [buffers ]--------------------------------------------------
+-- NOTE: buffers/tabs [buffers ]
 maps.n["<leader>c"] = { -- Close window and buffer at the same time.
   function() require("heirline-components.buffer").wipe() end,
   desc = "Wipe buffer",
@@ -335,6 +338,20 @@ maps.n["<b"] = {
   end,
   desc = "Move buffer tab left",
 }
+
+maps.n["+"] = { "<cmd>bprevious<cr>", desc = "Go to previous buffer" }
+maps.n["-"] = { "<cmd>b#<cr>", desc = "Toggle with the last buffer" }
+maps.n["<Tab>"] = { "<cmd>b#<cr>", desc = "Toggle with the last buffer" }
+maps.n["gb"] = { "<cmd>bprevious<cr>", desc = "Go to previous buffer" }
+maps.n["gl"] = { "<cmd>b#<cr>", desc = "Toggle with the last buffer" }
+
+-- FIX: huge delay. see commands/keymaps
+maps.n["gn"] = { "<cmd>bnext<cr>", desc = "Go to next buffer" }
+
+maps.n["gt"] = { "<cmd>tabp<cr>", desc = "Go to previous tab" }
+maps.n["gy"] = { "<cmd>tabn<cr>", desc = "Go to next tab" }
+maps.n["º"] = { "<cmd>bnext<cr>", desc = "Go to next buffer" }
+maps.n["ç"] = { "<cmd>wincmd w<cr>", desc = "Switch between windows" }
 
 maps.n["<leader>b"] = icons.b
 maps.n["<leader>bc"] = {
