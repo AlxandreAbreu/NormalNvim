@@ -84,28 +84,76 @@ local icons = {
   t = { desc = get_icon("Terminal", true) .. " Terminal" },
 }
 
--- NOTE:
--- maps.n["<Tab>"] = {  ':b#<cr>', { desc = 'Toggle with the last buffer', noremap = true, silent = true })
+-- NOTE: GENERAL KEYMAPS
 
--- standard Operations -----------------------------------------------------
 maps.n["j"] =
 { "v:count == 0 ? 'gj' : 'j'", expr = true, desc = "Move cursor down" }
 maps.n["k"] =
 { "v:count == 0 ? 'gk' : 'k'", expr = true, desc = "Move cursor up" }
+
 maps.n["<leader>w"] = { "<cmd>w<cr>", desc = "Save" }
 maps.n["<leader>W"] =
 { function() vim.cmd("SudaWrite") end, desc = "Save as sudo" }
+
 maps.n["<leader>n"] = { "<cmd>enew<cr>", desc = "New file" }
+
+-- commenting
+-- TODO: change binding
 maps.n["<Leader>/"] = { "gcc", remap = true, desc = "Toggle comment line" }
 maps.x["<Leader>/"] = { "gc", remap = true, desc = "Toggle comment" }
-maps.n["gx"] =
-{ utils.open_with_program, desc = "Open the file under cursor with a program" }
+
+-- FIX: gc conflict. Run checkhealth which-key
+maps.n["gca"] = { "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = "Add comment above" }
+maps.n["gco"] = { "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = "Add comment below" }
+
+-- Move Lines
+maps.n["<A-j>"] = { "<cmd>execute 'move .+' . v:count1<cr>==", desc = "Move down" }
+maps.n["<A-k>"] = { "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", desc = "Move up" }
+maps.i["<A-j>"] = { "<esc><cmd>m .+1<cr>==gi", desc = "Move Down" }
+maps.i["<A-k>"] = { "<esc><cmd>m .-2<cr>==gi", desc = "Move Up" }
+maps.v["<A-j>"] = { ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", desc = "Move down" }
+maps.v["<A-k>"] = { ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", desc = "Move up" }
+
+-- FIX:
+-- maps.n["gx"] =
+-- { utils.open_with_program, desc = "Open the file under cursor with a program" }
+
 maps.n["<C-s>"] = { "<cmd>w!<cr>", desc = "Force write" }
-maps.n["|"] = { "<cmd>vsplit<cr>", desc = "Vertical Split" }
-maps.n["\\"] = { "<cmd>split<cr>", desc = "Horizontal Split" }
-maps.i["<C-BS>"] = { "<C-W>", desc = "Enable CTRL+backsace to delete." }
+maps.n["|"] = { "<cmd>vsplit<cr>", desc = "Vertical split" }
+maps.n["_"] = { "<cmd>split<cr>", desc = "Horizontal split" }
+maps.i["<C-BS>"] = { "<C-W>", desc = "Enable CTRL+backsace to delete" }
 maps.n["0"] =
-{ "^", desc = "Go to the fist character of the line (aliases 0 to ^)" }
+{ "^", desc = "Go to the fist character of the line" }
+maps.n["«"] =
+{ "$", desc = "Go to the last character of the line" }
+maps.n["»"] =
+{ "0", desc = "Go to the first position of the line" }
+
+-- Navigation, find and center page
+maps.n["n"] = { "nzzzv", desc = "Find forwards and center" }
+maps.n["N"] = { "Nzzzv", desc = "Find backwards and center" }
+maps.n["G"] = { "Gzz", desc = "Go to page bottom and center" }
+maps.n["*"] = { "*zz",  desc = "TODO" }
+maps.n["#"] = { "#zz", desc = "TODO" }
+maps.n["g*"] = { "g*zz", desc = "TODO" }
+maps.n["g#"] = { "g#zz", desc = "TODO" }
+maps.n["<PageDown>"] = { "<C-d>zz", desc = "Page down and center" }
+maps.n["<PageUp>"] = { "<C-u>zz", desc = "Page up and center" }
+maps.n["<kPageDown>"] = { "<C-d>zz", desc = "Page down and center" }
+maps.n["<kPageUp>"] = { "<C-u>zz", desc = "Page up and center" }
+
+-- NOTE: KEYPAD/KEYCODES
+-- https://neovim.io/doc/user/intro.html#Terminal-mode
+-- key-notation key-codes keycodes
+maps.n["<Home>"] = { "gg", desc = "Go to top of page" }
+maps.n["<kHome>"] = { "gg", desc = "Go to top of page" }
+maps.n["<kUp>"] = { "gg", desc = "Go to top of page" }
+maps.n["<kEnd>"] = { "Gzz", desc = "Go to bottom of page" }
+maps.n["<kDown>"] = { "Gzz", desc = "Go to bottom of page" }
+maps.n["<kLeft>"] = { "^", desc = "Go to first non blank character in line" }
+maps.n["<kRight>"] = { "$", desc = "Go to last character in line" }
+
+-- Quit Neovim
 maps.n["<leader>q"] = { "<cmd>confirm q<cr>", desc = "Quit" }
 maps.n["<leader>q"] = {
   function()
@@ -126,7 +174,7 @@ maps.n["<Tab>"] = {
   desc = "FIX: Prevent TAB from behaving like <C-i>, as they share the same internal code",
 }
 
--- clipboard ---------------------------------------------------------------
+-- NOTE: CLIPBOARD
 
 -- BUG: We disable these mappings on termux by default because <C-y>
 --      is the keycode for scrolling, and remapping it would break it.
@@ -208,11 +256,20 @@ maps.n["<ESC>"] = {
   end,
 }
 
+-- Exit out of insert mode
+maps.i["jk"] = { "<esc>", desc = "Exit insert mode with jk" }
+maps.i["kj"] = { "<esc>", desc = "Exit insert mode with kj" }
+
 -- Improved tabulation ------------------------------------------------------
 maps.x["<S-Tab>"] = { "<gv", desc = "unindent line" }
 maps.x["<Tab>"] = { ">gv", desc = "indent line" }
 maps.x["<"] = { "<gv", desc = "unindent line" }
 maps.x[">"] = { ">gv", desc = "indent line" }
+
+-- Stay in indent mode
+maps.v["<"] = { "<gv", desc = "Decrease indentation (in visual mode)" }
+maps.v[">"] = { ">gv", desc = "Increase indentation (in visual mode)" }
+
 
 -- improved gg --------------------------------------------------------------
 maps.n["gg"] = {
@@ -290,11 +347,11 @@ maps.n["<leader>pv"] = { "<cmd>DistroReadVersion<cr>", desc = "Distro version" }
 maps.n["<leader>pc"] = { "<cmd>DistroReadChangelog<cr>", desc = "Distro changelog" }
 
 -- NOTE: buffers/tabs [buffers ]
-maps.n["<leader>c"] = { -- Close window and buffer at the same time.
+maps.n["<leader>k"] = { -- Close window and buffer at the same time.
   function() require("heirline-components.buffer").wipe() end,
   desc = "Wipe buffer",
 }
-maps.n["<leader>C"] = { -- Close buffer keeping the window.
+maps.n["<leader>c"] = { -- Close buffer keeping the window.
   function() require("heirline-components.buffer").close() end,
   desc = "Close buffer",
 }
@@ -689,7 +746,7 @@ end
 -- file browsers ------------------------------------
 -- yazi
 if is_available("yazi.nvim") and vim.fn.executable("yazi") == 1 then
-  maps.n["<leader>r"] = {
+  maps.n["<leader>y"] = {
     -- TODO: use 'Yazi toggle' instead once yazi v0.4.0 is released.
     "<cmd>Yazi<CR>",
     desc = "File browser",
@@ -703,41 +760,41 @@ end
 
 -- session manager ---------------------------------------------------------
 if is_available("neovim-session-manager") then
-  maps.n["<leader>S"] = icons.S
-  maps.n["<leader>Sl"] = {
+  maps.n["<leader>s"] = icons.S
+  maps.n["<leader>sl"] = {
     "<cmd>SessionManager! load_last_session<cr>",
     desc = "Load last session",
   }
-  maps.n["<leader>Ss"] = {
+  maps.n["<leader>ss"] = {
     "<cmd>SessionManager! save_current_session<cr>",
     desc = "Save this session",
   }
-  maps.n["<leader>Sd"] =
+  maps.n["<leader>sd"] =
   { "<cmd>SessionManager! delete_session<cr>", desc = "Delete session" }
-  maps.n["<leader>Sf"] =
+  maps.n["<leader>sf"] =
   { "<cmd>SessionManager! load_session<cr>", desc = "Search sessions" }
-  maps.n["<leader>S."] = {
+  maps.n["<leader>s."] = {
     "<cmd>SessionManager! load_current_dir_session<cr>",
     desc = "Load current directory session",
   }
 end
 if is_available("resession.nvim") then
-  maps.n["<leader>S"] = icons.S
-  maps.n["<leader>Sl"] = {
+  maps.n["<leader>s"] = icons.S
+  maps.n["<leader>sl"] = {
     function() require("resession").load "Last Session" end,
     desc = "Load last session",
   }
-  maps.n["<leader>Ss"] =
+  maps.n["<leader>ss"] =
   { function() require("resession").save() end, desc = "Save this session" }
-  maps.n["<leader>St"] = {
+  maps.n["<leader>st"] = {
     function() require("resession").save_tab() end,
     desc = "Save this tab's session",
   }
-  maps.n["<leader>Sd"] =
+  maps.n["<leader>sd"] =
   { function() require("resession").delete() end, desc = "Delete a session" }
-  maps.n["<leader>Sf"] =
+  maps.n["<leader>sf"] =
   { function() require("resession").load() end, desc = "Load a session" }
-  maps.n["<leader>S."] = {
+  maps.n["<leader>s."] = {
     function()
       require("resession").load(vim.fn.getcwd(), { dir = "dirsession" })
     end,
@@ -857,7 +914,7 @@ if is_available("telescope.nvim") then
     function() require("telescope.builtin").git_status() end,
     desc = "Git status",
   }
-  maps.n["<leader>f<CR>"] = {
+  maps.n["<leader>f<cr>"] = {
     function() require("telescope.builtin").resume() end,
     desc = "Resume previous search",
   }
@@ -879,7 +936,7 @@ if is_available("telescope.nvim") then
     end,
     desc = "Find nvim config files",
   }
-  maps.n["<leader>fB"] = {
+  maps.n["<leader><leader>"] = {
     function() require("telescope.builtin").buffers() end,
     desc = "Find buffers",
   }
@@ -891,13 +948,14 @@ if is_available("telescope.nvim") then
     function() require("telescope.builtin").commands() end,
     desc = "Find commands",
   }
+  -- NOTE: disabled by upstream
   -- Let's disable this. It is way too imprecise. Use rnvimr instead.
-  -- maps.n["<leader>ff"] = {
-  --   function()
-  --     require("telescope.builtin").find_files { hidden = true, no_ignore = true }
-  --   end,
-  --   desc = "Find all files",
-  -- }
+  maps.n["<leader>."] = {
+    function()
+      require("telescope.builtin").find_files { hidden = true, no_ignore = true }
+    end,
+    desc = "Find all files",
+  }
   -- maps.n["<leader>fF"] = {
   --   function() require("telescope.builtin").find_files() end,
   --   desc = "Find files (no hidden)",
@@ -956,7 +1014,7 @@ if is_available("telescope.nvim") then
     function() require("telescope.builtin").live_grep() end,
     desc = "Find words in project (no hidden)",
   }
-  maps.n["<leader>f/"] = {
+  maps.n["<leader>z"] = {
     function() require("telescope.builtin").current_buffer_fuzzy_find() end,
     desc = "Find words in current buffer",
   }
