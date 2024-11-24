@@ -1760,6 +1760,29 @@ end
 
 -- NOTE: ACTIONS
 maps.n["<leader>a"] = icons.b
+maps.v["<leader>as"] =  { "<cmd>sort<cr>", desc = "Sort selection range" }
+maps.n["<leader>adb"] = { "<cmd>g /^$/d<cr>", desc = "Delete all the blank lines" }
+
+-- HACK: doesn't save the file and return to normal mode
+-- maps.n["<leader>adr"] = { ':call feedkeys("ggVGdi")<cr>:w<cr><esc>', { noremap = true, noremap = true, silent = true, desc = 'Reset the buffer content and edit' } }
+
+
+-- TODO: move to functions.lua
+function remove_duplicates()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local seen = {}
+  local new_lines = {}
+  for _, line in ipairs(lines) do
+    if not seen[line] then
+      table.insert(new_lines, line)
+      seen[line] = true
+    end
+  end
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, new_lines)
+end
+
+vim.api.nvim_set_keymap('n', '<leader>add', ':lua remove_duplicates()<cr>', { noremap = true, silent = true, desc = 'Remove duplicate lines' })
+
 
 
 utils.set_mappings(maps)
