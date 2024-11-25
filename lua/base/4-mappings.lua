@@ -62,6 +62,10 @@ local is_available = utils.is_available
 local ui = require("base.utils.ui")
 local maps = require("base.utils").get_mappings_template()
 -- local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
+-- TODO: refactor. see utils.notify and others in this file
+-- HACK:
+-- Ensure that nvim-notify is loaded
+local notify = require("notify")
 
 -- NOTE: BASE BINDINGS
 
@@ -1852,9 +1856,8 @@ end
 vim.api.nvim_set_keymap('n', '<leader>add', ':lua remove_duplicates()<cr>',
   { noremap = true, silent = true, desc = '  Remove duplicate lines' })
 
-
 -- Function to cut lines containing a specific word, save them to the
--- clipboard, and remove only the created blank lines
+-- clipboard, remove only the created blank lines, and notify
 function CutLinesAndRemoveCreatedBlanks()
     local word = vim.fn.input("Enter the word: ")
     local lines_to_cut = {}
@@ -1885,10 +1888,12 @@ function CutLinesAndRemoveCreatedBlanks()
     -- Join lines with newline character and save to clipboard
     local text = table.concat(lines_to_cut, "\n")
     vim.fn.setreg('+', text)
+
+    -- Notify how many lines were cut
+    notify(#lines_to_cut .. " lines were cut and saved to the clipboard", "info")
 end
 
--- Function to cut lines containing a specific word, save them to the
--- clipboard, and remove all blank lines in the file
+-- Function to cut lines containing a specific word, save them to the clipboard, remove all blank lines in the file, and notify
 function CutLinesAndRemoveAllBlanks()
     local word = vim.fn.input("Enter the word: ")
     local lines_to_cut = {}
@@ -1914,6 +1919,9 @@ function CutLinesAndRemoveAllBlanks()
     -- Join lines with newline character and save to clipboard
     local text = table.concat(lines_to_cut, "\n")
     vim.fn.setreg('+', text)
+
+    -- Notify how many lines were cut
+    notify(#lines_to_cut .. " lines were cut and saved to the clipboard", "info")
 end
 
 -- Create the custom commands
@@ -1926,13 +1934,12 @@ vim.api.nvim_create_user_command('CutLinesAllBlanks', function()
 end, { nargs = 0 })
 
 -- Set up the keybindings
-vim.api.nvim_set_keymap('n', '<leader>ac', ':CutLinesCreatedBlanks<CR>', {
-  desc = "  Cut lines with specific regex",
-  noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ab', ':CutLinesAllBlanks<CR>', {
+vim.api.nvim_set_keymap('n', '<leader>ab', ':CutLinesAllBlanks<cr>', {
   desc = "  Cut lines with specific regex (purge blanks)",
   noremap = true, silent = true })
-
+vim.api.nvim_set_keymap('n', '<leader>ar', ':CutLinesCreatedBlanks<cr>',
+  { desc = "  Cut lines with specific regex",
+    noremap = true, silent = true })
 
 -- NOTE: NEOVIM
 maps.n["<leader>n"] = icons.n
