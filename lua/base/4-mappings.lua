@@ -79,7 +79,6 @@ local icons = {
   l = { desc = get_icon("LSP", true) .. " LSP" },
   n = { desc = get_icon("Neovim", true) .. " Neovim" },
   p = { desc = get_icon("Packages", true) .. " Packages" },
-  q = { desc = get_icon("Quit", true) .. " Quit" },
   s = { desc = get_icon("Session", true) .. " Session" },
   t = { desc = get_icon("Terminal", true) .. " Terminal" },
   tt = { desc = get_icon("Test", true) .. " Test" },
@@ -167,8 +166,7 @@ maps.n["<kRight>"] = { "$", desc = "Go to last character in line" }
 
 
 -- NOTE: QUIT NEOVIM
-maps.n["<leader>q"] = icons.q
-maps.n["<leader>qq"] = {
+maps.n["<leader>sq"] = {
   -- function()
   --   -- Ask user for confirmation
   --   local choice = vim.fn.confirm("Do you really want to exit nvim?", "&Yes\n&No", 2)
@@ -181,7 +179,7 @@ maps.n["<leader>qq"] = {
   desc = "  Quit Neovim",
 }
 
-maps.n["<leader>qf"] = { "<cmd>qall<cr>", desc = "  Force quit Neovim" }
+maps.n["<leader>sQ"] = { "<cmd>qall<cr>", desc = "  Force quit Neovim" }
 
 maps.n["<Tab>"] = {
   "<Tab>",
@@ -393,6 +391,10 @@ maps.n["<leader>ba"] = {
   function() vim.cmd("wa") end,
   desc = "󰆔  Write all changed buffers",
 }
+maps.n["<leader>bc"] = {
+  "<cmd>ggVG",
+  desc = "Select the buffer content",
+}
 maps.n["<leader>bk"] = {
   function() require("heirline-components.buffer").close_all() end,
   desc = "  Close all buffers",
@@ -410,6 +412,26 @@ maps.n["<leader>br"] = {
   desc = "  Close all buffers to the right",
 }
 maps.n["<leader>bs"] = icons.bs
+
+-- Function to select and sort the entire buffer content
+function SelectAndSortBuffer()
+    -- Select the entire buffer
+    vim.cmd('normal! ggVG')
+
+    -- Sort the selected content
+    vim.cmd('sort')
+end
+
+-- Create the custom command
+vim.api.nvim_create_user_command('SortBuffer', function()
+    SelectAndSortBuffer()
+end, { nargs = 0 })
+
+-- Set up the keybinding
+vim.api.nvim_set_keymap('n', '<leader>bsc', ':SortBuffer<cr>', {
+  desc = "Sort buffer content",
+  noremap = true, silent = true })
+
 maps.n["<leader>bse"] = {
   function() require("heirline-components.buffer").sort "extension" end,
   desc = "  Sort by extension",
@@ -880,48 +902,49 @@ if is_available("neo-tree.nvim") then
 end
 
 -- NOTE: SESSION MANAGER
+
+maps.n["<leader>s"] = icons.s
+
 if is_available("neovim-session-manager") then
-  maps.n["<leader>s"] = icons.s
   maps.n["<leader>sl"] = {
     "<cmd>SessionManager! load_last_session<cr>",
     desc = "  Load last session",
   }
+  maps.n["<leader>sf"] =
+  { "<cmd>SessionManager! load_session<cr>", desc = "  Search sessions" }
   maps.n["<leader>ss"] = {
     "<cmd>SessionManager! save_current_session<cr>",
     desc = "  Save this session",
   }
-  maps.n["<leader>sd"] =
-  { "<cmd>SessionManager! delete_session<cr>", desc = " Delete session" }
-  maps.n["<leader>sf"] =
-  { "<cmd>SessionManager! load_session<cr>", desc = " Search sessions" }
   maps.n["<leader>s."] = {
     "<cmd>SessionManager! load_current_dir_session<cr>",
     desc = "  Load current directory session",
   }
 end
-if is_available("resession.nvim") then
-  maps.n["<leader>s"] = icons.S
-  maps.n["<leader>sl"] = {
-    function() require("resession").load "Last Session" end,
-    desc = "  Load last session",
-  }
-  maps.n["<leader>ss"] =
-  { function() require("resession").save() end, desc = "  Save this session" }
-  maps.n["<leader>st"] = {
-    function() require("resession").save_tab() end,
-    desc = "  Save this tab's session",
-  }
-  maps.n["<leader>sd"] =
-  { function() require("resession").delete() end, desc = "  Delete a session" }
-  maps.n["<leader>sf"] =
-  { function() require("resession").load() end, desc = "  Load a session" }
-  maps.n["<leader>s."] = {
-    function()
-      require("resession").load(vim.fn.getcwd(), { dir = "dirsession" })
-    end,
-    desc = "  Load current directory session",
-  }
-end
+
+-- if is_available("resession.nvim") then
+--   maps.n["<leader>s"] = icons.S
+--   maps.n["<leader>sl"] = {
+--     function() require("resession").load "Last Session" end,
+--     desc = "  Load last session",
+--   }
+--   maps.n["<leader>ss"] =
+--   { function() require("resession").save() end, desc = "  Save this session" }
+--   maps.n["<leader>st"] = {
+--     function() require("resession").save_tab() end,
+--     desc = "  Save this tab's session",
+--   }
+--   maps.n["<leader>sd"] =
+--   { function() require("resession").delete() end, desc = "  Delete a session" }
+--   maps.n["<leader>sf"] =
+--   { function() require("resession").load() end, desc = "  Load a session" }
+--   maps.n["<leader>s."] = {
+--     function()
+--       require("resession").load(vim.fn.getcwd(), { dir = "dirsession" })
+--     end,
+--     desc = "  Load current directory session",
+--   }
+-- end
 
 -- NOTE: AERIAL.NVIM
 if is_available("aerial.nvim") then
@@ -1827,34 +1850,89 @@ end
 
 -- Remove duplicate lines in a file
 vim.api.nvim_set_keymap('n', '<leader>add', ':lua remove_duplicates()<cr>',
-  { noremap = true, silent = true, desc = ' Remove duplicate lines' })
+  { noremap = true, silent = true, desc = '  Remove duplicate lines' })
 
--- TODO:
--- Function to cut lines containing a specific word and save them to the clipboard
--- function CutLinesContainingWord(word)
---     local lines_to_cut = {}
---     for i = 1, vim.fn.line('$') do
---         local line = vim.fn.getline(i)
---         if line:find(word) then
---             table.insert(lines_to_cut, line)
---             vim.fn.setline(i, "")
---         end
---     end
---     -- Join lines with newline character and save to clipboard
---     local text = table.concat(lines_to_cut, "\n")
---     vim.fn.setreg('+', text)
--- end
 
--- Create the custom command
--- vim.api.nvim_create_user_command('CutLines', function(opts)
---     CutLinesContainingWord(opts.args)
--- end, { nargs = 1 })
+-- Function to cut lines containing a specific word, save them to the
+-- clipboard, and remove only the created blank lines
+function CutLinesAndRemoveCreatedBlanks()
+    local word = vim.fn.input("Enter the word: ")
+    local lines_to_cut = {}
+    local lines_to_remove = {}
 
--- Set up the keybinding
--- vim.api.nvim_set_keymap('n', '<leader>cc', ':CutLines<Space>', { noremap = true, silent = true })
+    -- Find lines containing the word and mark them for removal
+    for i = 1, vim.fn.line('$') do
+        local line = vim.fn.getline(i)
+        if line:find(word) then
+            table.insert(lines_to_cut, line)
+            table.insert(lines_to_remove, i)
+        end
+    end
 
--- NOTE: HELP
-maps.n["<leader>h"] = icons.h
+    -- Remove marked lines
+    for i = #lines_to_remove, 1, -1 do
+        vim.fn.setline(lines_to_remove[i], "")
+    end
+
+    -- Remove only the blank lines created by the cut operation
+    for i = vim.fn.line('$'), 1, -1 do
+        if vim.fn.getline(i) == "" and i == lines_to_remove[#lines_to_remove] then
+            vim.fn.deletebufline('%', i)
+            table.remove(lines_to_remove)
+        end
+    end
+
+    -- Join lines with newline character and save to clipboard
+    local text = table.concat(lines_to_cut, "\n")
+    vim.fn.setreg('+', text)
+end
+
+-- Function to cut lines containing a specific word, save them to the
+-- clipboard, and remove all blank lines in the file
+function CutLinesAndRemoveAllBlanks()
+    local word = vim.fn.input("Enter the word: ")
+    local lines_to_cut = {}
+    local total_lines = vim.fn.line('$')
+
+    -- Find lines containing the word and mark them for removal
+    for i = 1, total_lines do
+        local line = vim.fn.getline(i)
+        if line:find(word) then
+            table.insert(lines_to_cut, line)
+            vim.fn.setline(i, "")
+        end
+    end
+
+    -- Remove all blank lines
+    for i = total_lines, 1, -1 do
+        local line = vim.fn.getline(i)
+        if line == "" then
+            vim.fn.deletebufline('%', i)
+        end
+    end
+
+    -- Join lines with newline character and save to clipboard
+    local text = table.concat(lines_to_cut, "\n")
+    vim.fn.setreg('+', text)
+end
+
+-- Create the custom commands
+vim.api.nvim_create_user_command('CutLinesCreatedBlanks', function()
+    CutLinesAndRemoveCreatedBlanks()
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command('CutLinesAllBlanks', function()
+    CutLinesAndRemoveAllBlanks()
+end, { nargs = 0 })
+
+-- Set up the keybindings
+vim.api.nvim_set_keymap('n', '<leader>ac', ':CutLinesCreatedBlanks<CR>', {
+  desc = "  Cut lines with specific regex",
+  noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ab', ':CutLinesAllBlanks<CR>', {
+  desc = "  Cut lines with specific regex (purge blanks)",
+  noremap = true, silent = true })
+
 
 -- NOTE: NEOVIM
 maps.n["<leader>n"] = icons.n
