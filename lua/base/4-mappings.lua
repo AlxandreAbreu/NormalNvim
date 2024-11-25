@@ -55,6 +55,8 @@
 
 local M = {}
 local utils = require("base.utils")
+-- TEST:
+local func = require("base.utils.init")
 local get_icon = utils.get_icon
 local is_available = utils.is_available
 local ui = require("base.utils.ui")
@@ -105,16 +107,31 @@ maps.n["<Leader>/"] = { "gcc", remap = true, desc = " Toggle comment line" }
 maps.x["<Leader>/"] = { "gc", remap = true, desc = " Toggle comment" }
 
 -- FIX: gc conflict. Run checkhealth which-key
-maps.n["gca"] = { "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = " Add comment above" }
-maps.n["gco"] = { "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", desc = " Add comment below" }
+maps.n["gca"] = { "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>",
+  desc = " Add comment above" }
+maps.n["gco"] = { "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>",
+  desc = " Add comment below" }
+
+-- FIX: there's a flickering in the heirline mode when moving lines
 
 -- Move Lines
-maps.n["<A-j>"] = { "<cmd>execute 'move .+' . v:count1<cr>==", desc = "Move line down" }
-maps.n["<A-k>"] = { "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", desc = "Move line up" }
-maps.i["<A-j>"] = { "<esc><cmd>m .+1<cr>==gi", desc = "Move line down" }
-maps.i["<A-k>"] = { "<esc><cmd>m .-2<cr>==gi", desc = "Move line up" }
-maps.v["<A-j>"] = { ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", desc = "Move line down" }
-maps.v["<A-k>"] = { ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", desc = "Move line up" }
+maps.n["<A-j>"] = { "<cmd>execute 'move .+' . v:count1<cr>==",
+  desc = "Move line down", noremap = true, silent = true }
+
+maps.n["<A-k>"] = { "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",
+  desc = "Move line up", noremap = true, silent = true }
+
+maps.i["<A-j>"] = { "<esc><cmd>m .+1<cr>==gi",
+  desc = "Move line down", noremap = true, silent = true }
+
+maps.i["<A-k>"] = { "<esc><cmd>m .-2<cr>==gi",
+  desc = "Move line up", noremap = true, silent = true }
+
+maps.v["<A-j>"] = { ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",
+  desc = "Move line down", noremap = true, silent = true }
+
+maps.v["<A-k>"] = { ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv",
+  desc = "Move line up", noremap = true, silent = true }
 
 -- FIX:
 -- maps.n["gx"] =
@@ -150,101 +167,6 @@ maps.n["<kDown>"] = { "Gzz", desc = "Go to bottom of page" }
 maps.n["<kLeft>"] = { "^", desc = "Go to first non blank character in line" }
 maps.n["<kRight>"] = { "$", desc = "Go to last character in line" }
 
--- NOTE: WINDOWS/SPLITS
-
-maps.n["ç"] = { "<cmd>wincmd w<cr>", desc = "Switch between windows" }
-
-maps.n["<leader>k"] = { -- Close window and buffer at the same time.
-  function() require("heirline-components.buffer").wipe() end,
-  desc = " Wipe buffer",
-}
-maps.n["<leader>c"] = { -- Close buffer keeping the window.
-  function() require("heirline-components.buffer").close() end,
-  desc = " Close buffer",
-}
-maps.n["<leader>bw"] = {     -- Closes the window
-  function()
-    vim.cmd("silent! close") -- Be aware you can't close the last window
-  end,
-  desc = " Close window",
-}
-
--- TODO:
--- Close buffer keeping the window → Without confirmation.
--- maps.n["<leader>X"] = {
---   function() require("heirline-components.buffer").close(0, true) end,
---   desc = "Force close buffer",
-
--- Split the window
-maps.n["|"] = { "<cmd>vsplit<cr>", desc = " Split window vertically " }
-maps.n["_"] = { "<cmd>split<cr>", desc = " Split window horizontally" }
-
--- Pick which window to split
-maps.n["<leader>b-"] = {
-  function()
-    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
-      vim.cmd.split()
-      vim.api.nvim_win_set_buf(0, bufnr)
-    end)
-  end,
-  desc = " Split buffer horizontal from tabline",
-}
-maps.n["<leader>b|"] = {
-  function()
-    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
-      vim.cmd.vsplit()
-      vim.api.nvim_win_set_buf(0, bufnr)
-    end)
-  end,
-  desc = " Split buffer vertically from tabline",
-}
-
--- smart-splits.nvim
-if is_available("smart-splits.nvim") then
-  maps.n["<C-h>"] = {
-    function() require("smart-splits").move_cursor_left() end,
-    desc = " Move to left split",
-  }
-  maps.n["<C-j>"] = {
-    function() require("smart-splits").move_cursor_down() end,
-    desc = "Move to below split",
-  }
-  maps.n["<C-k>"] = {
-    function() require("smart-splits").move_cursor_up() end,
-    desc = "Move to above split",
-  }
-  maps.n["<C-l>"] = {
-    function() require("smart-splits").move_cursor_right() end,
-    desc = " Move to right split",
-  }
-  maps.n["<C-Up>"] = {
-    function() require("smart-splits").resize_up() end,
-    desc = "Resize split up",
-  }
-  maps.n["<C-Down>"] = {
-    function() require("smart-splits").resize_down() end,
-    desc = "Resize split down",
-  }
-  maps.n["<C-Left>"] = {
-    function() require("smart-splits").resize_left() end,
-    desc = "Resize split left",
-  }
-  maps.n["<C-Right>"] = {
-    function() require("smart-splits").resize_right() end,
-    desc = "Resize split right",
-  }
-else
-  maps.n["<C-h>"] = { "<C-w>h", desc = " Move to left split" }
-  maps.n["<C-j>"] = { "<C-w>j", desc = "Move to below split" }
-  maps.n["<C-k>"] = { "<C-w>k", desc = "Move to above split" }
-  maps.n["<C-l>"] = { "<C-w>l", desc = " Move to right split" }
-  maps.n["<C-Up>"] = { "<cmd>resize -2<cr>", desc = "Resize split up" }
-  maps.n["<C-Down>"] = { "<cmd>resize +2<cr>", desc = "Resize split down" }
-  maps.n["<C-Left>"] =
-  { "<cmd>vertical resize -2<cr>", desc = "Resize split left" }
-  maps.n["<C-Right>"] =
-  { "<cmd>vertical resize +2<cr>", desc = "Resize split right" }
-end
 
 -- NOTE: QUIT NEOVIM
 maps.n["<leader>q"] = icons.q
@@ -460,83 +382,26 @@ maps.n["<leader>pD"] = { "<cmd>DistroUpdate<cr>", desc = " Update the distro"
 maps.n["<leader>pv"] = { "<cmd>DistroReadVersion<cr>", desc = " Check the distro version" }
 maps.n["<leader>pc"] = { "<cmd>DistroReadChangelog<cr>", desc = " Read the distro changelog" }
 
--- NOTE: buffers/tabs [buffers ]
+
+-- NOTE: BUFFERS
+
+maps.n["<leader>b"] = icons.b
 
 maps.n["<leader>ba"] = {
   function() vim.cmd("wa") end,
   desc = "󰆔 Write all changed buffers",
 }
-maps.n["º"] = {
-  function()
-    require("heirline-components.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
-  end,
-  desc = " Next buffer",
-}
-maps.n["+"] = {
-  function()
-    require("heirline-components.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
-  end,
-  desc = " Previous buffer",
-}
-maps.n[">b"] = {
-  function()
-    require("heirline-components.buffer").move(vim.v.count > 0 and vim.v.count or 1)
-  end,
-  desc = " Move buffer tab right",
-}
-maps.n["<b"] = {
-  function()
-    require("heirline-components.buffer").move(-(vim.v.count > 0 and vim.v.count or 1))
-  end,
-  desc = " Move buffer tab left",
-}
-
-maps.n["+"] = { "<cmd>bprevious<cr>", desc = " Go to previous buffer" }
-maps.n["-"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
-maps.n["<Tab>"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
-maps.n["gb"] = { "<cmd>bprevious<cr>", desc = " Go to previous buffer" }
-maps.n["gl"] = { "<cmd>b#<cr>", desc = " Toggle with the last buffer" }
-
--- FIX: huge delay. see commands/keymaps
--- Lags because gnn is bound to "Start selecting nodes with nvim-treesitter"
-maps.n["gn"] = { "<cmd>bnext<cr>", desc = " Go to next buffer" }
--- maps.n["gn"] = { "<cmd>bnext<cr>", desc = "  Go to next buffer", noremap = true }
--- :map gn
--- :map gnn
--- See: nvim-treesitter/incremental_selection.lua
-
-maps.n["gt"] = { "<cmd>tabp<cr>", desc = " Go to previous tab" }
-maps.n["gy"] = { "<cmd>tabn<cr>", desc = " Go to next tab" }
-maps.n["º"] = { "<cmd>bnext<cr>", desc = " Go to next buffer" }
-
-maps.n["<leader>b"] = icons.b
-maps.n["<leader>bc"] = {
-  function() require("heirline-components.buffer").close_all(true) end,
-  desc = " Close all buffers except current",
-}
-maps.n["<leader>bC"] = {
+maps.n["<leader>bk"] = {
   function() require("heirline-components.buffer").close_all() end,
   desc = " Close all buffers",
-}
-maps.n["<leader>v"] = {
-  function()
-    require("heirline-components.all").heirline.buffer_picker(
-      function(bufnr) vim.api.nvim_win_set_buf(0, bufnr) end
-    )
-  end,
-  desc = " Select buffer from tabline",
-}
-maps.n["<leader>r"] = {
-  function()
-    require("heirline-components.all").heirline.buffer_picker(
-      function(bufnr) require("heirline-components.buffer").close(bufnr) end
-    )
-  end,
-  desc = "󰆤 Delete buffer from tabline",
 }
 maps.n["<leader>bl"] = {
   function() require("heirline-components.buffer").close_left() end,
   desc = " Close all buffers to the left",
+}
+maps.n["<leader>bo"] = {
+  function() require("heirline-components.buffer").close_all(true) end,
+  desc = " Close all buffers except current",
 }
 maps.n["<leader>br"] = {
   function() require("heirline-components.buffer").close_right() end,
@@ -563,7 +428,68 @@ maps.n["<leader>bsm"] = {
   function() require("heirline-components.buffer").sort "modified" end,
   desc = " Sort by modification (buffers)",
 }
+-- TODO:
+maps.n["<leader>bw"] = {
+  "ggVGd",
+  desc = " Wipe the buffer content",
+}
+maps.n["<leader>by"] = {
+  "ggVGy",
+  desc = "Yank the buffer content",
+}
 
+-- FIX: disable treesitter todo syntax coloring!?? conflicts with todo-comments
+
+-- NOTE: BUFFERS QUICK BINDINGS
+
+maps.n["<leader>k"] = {
+  function() require("heirline-components.buffer").wipe() end,
+  desc = "Close window and buffer at the same time",
+}
+maps.n["<leader>c"] = {
+  function() require("heirline-components.buffer").close() end,
+  desc = " Close buffer keeping the window",
+}
+maps.n["º"] = {
+  function()
+    require("heirline-components.buffer").nav(vim.v.count > 0 and vim.v.count or 1)
+  end,
+  desc = " Next buffer",
+}
+maps.n["+"] = {
+  function()
+    require("heirline-components.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1))
+  end,
+  desc = " Previous buffer",
+}
+maps.n[">b"] = {
+  function()
+    require("heirline-components.buffer").move(vim.v.count > 0 and vim.v.count or 1)
+  end,
+  desc = " Move buffer tab right",
+}
+maps.n["<b"] = {
+  function()
+    require("heirline-components.buffer").move(-(vim.v.count > 0 and vim.v.count or 1))
+  end,
+  desc = " Move buffer tab left",
+}
+maps.n["<leader>v"] = {
+  function()
+    require("heirline-components.all").heirline.buffer_picker(
+      function(bufnr) vim.api.nvim_win_set_buf(0, bufnr) end
+    )
+  end,
+  desc = " Select buffer from tabline",
+}
+maps.n["<leader>r"] = {
+  function()
+    require("heirline-components.all").heirline.buffer_picker(
+      function(bufnr) require("heirline-components.buffer").close(bufnr) end
+    )
+  end,
+  desc = "󰆤 Delete buffer from tabline",
+}
 -- quick movement aliases
 maps.n["<C-k>"] = {
   function()
@@ -577,6 +503,120 @@ maps.n["<C-j>"] = {
   end,
   desc = "Previous buffer",
 }
+
+maps.n["+"] = { "<cmd>bprevious<cr>", desc = " Go to previous buffer" }
+maps.n["-"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
+maps.n["<Tab>"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
+maps.n["gb"] = { "<cmd>bprevious<cr>", desc = " Go to previous buffer" }
+maps.n["gl"] = { "<cmd>b#<cr>", desc = " Toggle with the last buffer" }
+
+-- FIX: huge delay. see commands/keymaps
+-- Lags because gnn is bound to "Start selecting nodes with nvim-treesitter"
+maps.n["gn"] = { "<cmd>bnext<cr>", desc = " Go to next buffer" }
+-- maps.n["gn"] = { "<cmd>bnext<cr>", desc = "  Go to next buffer", noremap = true }
+-- :map gn
+-- :map gnn
+-- See: nvim-treesitter/incremental_selection.lua
+
+
+-- NOTE: TABS
+
+maps.n["gt"] = { "<cmd>tabp<cr>", desc = " Go to previous tab" }
+maps.n["gy"] = { "<cmd>tabn<cr>", desc = " Go to next tab" }
+maps.n["º"] = { "<cmd>bnext<cr>", desc = " Go to next buffer" }
+
+maps.n["]t"] = { function() vim.cmd.tabnext() end, desc = "Next tab" }
+maps.n["[t"] = { function() vim.cmd.tabprevious() end, desc = "Previous tab" }
+
+-- NOTE: WINDOWS/SPLITS
+
+maps.n["ç"] = { "<cmd>wincmd w<cr>", desc = "Switch between windows" }
+
+maps.n["<leader>bq"] = {     -- Closes the window
+  function()
+    vim.cmd("silent! close") -- Be aware you can't close the last window
+  end,
+  desc = " Close window",
+}
+
+-- TODO:
+-- Close buffer keeping the window → Without confirmation.
+-- maps.n["<leader>X"] = {
+--   function() require("heirline-components.buffer").close(0, true) end,
+--   desc = "Force close buffer",
+
+-- Split the window
+maps.n["|"] = { "<cmd>vsplit<cr>", desc = " Split window vertically " }
+maps.n["_"] = { "<cmd>split<cr>", desc = " Split window horizontally" }
+
+-- Pick which window to split
+maps.n["<leader>b-"] = {
+  function()
+    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
+      vim.cmd.split()
+      vim.api.nvim_win_set_buf(0, bufnr)
+    end)
+  end,
+  desc = " Split buffer horizontal from tabline",
+}
+maps.n["<leader>b|"] = {
+  function()
+    require("heirline-components.all").heirline.buffer_picker(function(bufnr)
+      vim.cmd.vsplit()
+      vim.api.nvim_win_set_buf(0, bufnr)
+    end)
+  end,
+  desc = " Split buffer vertically from tabline",
+}
+
+-- smart-splits.nvim
+if is_available("smart-splits.nvim") then
+  maps.n["<C-h>"] = {
+    function() require("smart-splits").move_cursor_left() end,
+    desc = " Move to left split",
+  }
+  maps.n["<C-j>"] = {
+    function() require("smart-splits").move_cursor_down() end,
+    desc = "Move to below split",
+  }
+  maps.n["<C-k>"] = {
+    function() require("smart-splits").move_cursor_up() end,
+    desc = "Move to above split",
+  }
+  maps.n["<C-l>"] = {
+    function() require("smart-splits").move_cursor_right() end,
+    desc = " Move to right split",
+  }
+  maps.n["<C-Up>"] = {
+    function() require("smart-splits").resize_up() end,
+    desc = "Resize split up",
+  }
+  maps.n["<C-Down>"] = {
+    function() require("smart-splits").resize_down() end,
+    desc = "Resize split down",
+  }
+  maps.n["<C-Left>"] = {
+    function() require("smart-splits").resize_left() end,
+    desc = "Resize split left",
+  }
+  maps.n["<C-Right>"] = {
+    function() require("smart-splits").resize_right() end,
+    desc = "Resize split right",
+  }
+else
+  maps.n["<C-h>"] = { "<C-w>h", desc = " Move to left split" }
+  maps.n["<C-j>"] = { "<C-w>j", desc = "Move to below split" }
+  maps.n["<C-k>"] = { "<C-w>k", desc = "Move to above split" }
+  maps.n["<C-l>"] = { "<C-w>l", desc = " Move to right split" }
+  maps.n["<C-Up>"] = { "<cmd>resize -2<cr>", desc = "Resize split up" }
+  maps.n["<C-Down>"] = { "<cmd>resize +2<cr>", desc = "Resize split down" }
+  maps.n["<C-Left>"] =
+  { "<cmd>vertical resize -2<cr>", desc = "Resize split left" }
+  maps.n["<C-Right>"] =
+  { "<cmd>vertical resize +2<cr>", desc = "Resize split right" }
+end
+
+
 maps.n["<S-Down>"] = {
   function() vim.api.nvim_feedkeys("5j", "n", true) end,
   desc = "Fast move down",
@@ -585,10 +625,6 @@ maps.n["<S-Up>"] = {
   function() vim.api.nvim_feedkeys("5k", "n", true) end,
   desc = "Fast move up",
 }
-
--- tabs
-maps.n["]t"] = { function() vim.cmd.tabnext() end, desc = "Next tab" }
-maps.n["[t"] = { function() vim.cmd.tabprevious() end, desc = "Previous tab" }
 
 -- zen mode
 if is_available("zen-mode.nvim") then
@@ -1763,11 +1799,15 @@ maps.n["<leader>a"] = icons.a
 maps.v["<leader>as"] =  { "<cmd>sort<cr>", desc = "Sort selection range" }
 maps.n["<leader>adb"] = { "<cmd>g /^$/d<cr>", desc = "Delete all the blank lines" }
 
+-- TODO:
+-- maps.n["gx"] =
+-- { utils.open_with_program, desc = "Open the file under cursor with a program" }
+
 -- HACK: doesn't save the file and return to normal mode
 -- maps.n["<leader>adr"] = { ':call feedkeys("ggVGdi")<cr>:w<cr><esc>', { noremap = true, noremap = true, silent = true, desc = 'Reset the buffer content and edit' } }
 
-
--- TODO: move to functions.lua
+-- TODO: refactor to functions
+-- Remove duplicate lines in a file
 function remove_duplicates()
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   local seen = {}
@@ -1781,9 +1821,33 @@ function remove_duplicates()
   vim.api.nvim_buf_set_lines(0, 0, -1, false, new_lines)
 end
 
-vim.api.nvim_set_keymap('n', '<leader>add', ':lua remove_duplicates()<cr>', { noremap = true, silent = true, desc = 'Remove duplicate lines' })
+-- Remove duplicate lines in a file
+vim.api.nvim_set_keymap('n', '<leader>add', ':lua remove_duplicates()<cr>',
+  { noremap = true, silent = true, desc = 'Remove duplicate lines' })
 
+-- TODO:
+-- Function to cut lines containing a specific word and save them to the clipboard
+-- function CutLinesContainingWord(word)
+--     local lines_to_cut = {}
+--     for i = 1, vim.fn.line('$') do
+--         local line = vim.fn.getline(i)
+--         if line:find(word) then
+--             table.insert(lines_to_cut, line)
+--             vim.fn.setline(i, "")
+--         end
+--     end
+--     -- Join lines with newline character and save to clipboard
+--     local text = table.concat(lines_to_cut, "\n")
+--     vim.fn.setreg('+', text)
+-- end
 
+-- Create the custom command
+-- vim.api.nvim_create_user_command('CutLines', function(opts)
+--     CutLinesContainingWord(opts.args)
+-- end, { nargs = 1 })
+
+-- Set up the keybinding
+-- vim.api.nvim_set_keymap('n', '<leader>cc', ':CutLines<Space>', { noremap = true, silent = true })
 
 utils.set_mappings(maps)
 return M

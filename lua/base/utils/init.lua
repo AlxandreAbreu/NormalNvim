@@ -341,4 +341,6 @@ function M.which_key_register()
   end
 end
 
+-- NOTE: CUSTOM FUNCTIONS
+
 return M
