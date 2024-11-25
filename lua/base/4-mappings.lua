@@ -53,25 +53,22 @@
 --   l[nore]map     |  -   | yes | yes |  -  |  -  |  -  |  -   | yes  |
 --   -------------------------------------------------------------------
 
+-- NOTE: VARIABLES
 local M = {}
+-- TODO: refactor all functions declared here
 local utils = require("base.utils")
--- TEST:
-local func = require("base.utils.init")
 local get_icon = utils.get_icon
 local is_available = utils.is_available
 local ui = require("base.utils.ui")
 local maps = require("base.utils").get_mappings_template()
 -- local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 
--- -------------------------------------------------------------------------
---
--- ## Base bindings ########################################################
---
--- -------------------------------------------------------------------------
+-- NOTE: BASE BINDINGS
 
--- icons displayed on which-key.nvim ---------------------------------------
+-- NOTE: WHICH-KEY ICONS
 local icons = {
   a = { desc = get_icon("Action", true) .. " Actions" },
+  ad = { desc = get_icon("Delete", true) .. " Delete" },
   b = { desc = get_icon("Buffer", true) .. " Buffers" },
   bs = { desc = get_icon("Sort", true) .. " Sort Buffers" },
   c = { desc = get_icon("Run", true) .. " Compiler" },
@@ -1797,6 +1794,7 @@ end
 -- NOTE: ACTIONS
 maps.n["<leader>a"] = icons.a
 maps.v["<leader>as"] =  { "<cmd>sort<cr>", desc = "Sort selection range" }
+maps.n["<leader>ad"] = icons.ad
 maps.n["<leader>adb"] = { "<cmd>g /^$/d<cr>", desc = "Delete all the blank lines" }
 
 -- TODO:

@@ -132,7 +132,10 @@ return {
   MasonPending = "⟳",
 
   -- Render-markdown
-  RenderMarkdown = { ' ', ' ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' }
+  RenderMarkdown = { ' ', ' ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+
+  -- Custom
+  Delete = ""
 }
 
 -- TODO: implement icons
@@ -296,10 +299,11 @@ return {
 --   },
 -- }
 
+-- NOTE: ORG
+
 -- TODO: icons NormalNivm
 -- https://github.com/NormalNvim/NormalNvim/blob/main/lua/base/icons/icons.lua
 
--- TODO: ICONS
 -- NOTE: see pommodoro video, icon = '󰅶' 󰍡 󰈸 󰽥 󱄅  󰇮
 --  󰖟 󰷐 󰌠 󰴭 󰓻 󰌌 󰗀  󰡨 󰌷 󰃤 󰀫 󰜎 
 -- dashboard: 󰕮 telescope 󰭎 trouble 󰙅 fzf: 󱡠 harpoon: 󱡀
@@ -318,7 +322,7 @@ return {
 --        󰏪       
 --            
 --              
---              
+--            
 --            
 --            
 --           
@@ -374,76 +378,7 @@ return {
 
 -- Markdown: 
 
--- -- Heirline-components - winbar
--- CompilerPlay = "",
--- CompilerStop = "",
--- CompilerRedo = "",
--- NeoTree = "",
--- Aerial = "" ,
--- ZenMode = "󰰶",
--- BufWrite = "",
--- BufWriteAll = "",
--- Ellipsis = "…",
--- BreadcrumbSeparator = "",
---
--- -- Heirline-components - statuscolumn
--- FoldClosed = "",
--- FoldOpened = "",
--- FoldSeparator = " ",
---
--- -- Heirline-components - statusline
--- ActiveLSP = "",
--- ActiveTS = "",
--- Environment = "",
--- DiagnosticError = "",
--- DiagnosticHint = "󰌵",
--- DiagnosticInfo = "󰋼",
--- DiagnosticWarn = "",
--- LSPLoading1 = "",
--- LSPLoading2 = "󰀚",
--- LSPLoading3 = "",
--- SearchCount = "",
--- MacroRecording = "",
--- ToggleResults = "󰑮",
---
--- -- Heirline-components - misc
--- Paste = "󰅌",
--- PathSeparator = "",
---
--- -- Neotree
--- FolderClosed = "",
--- FolderEmpty = "",
--- FolderOpen = "",
--- Diagnostic = "󰒡",
--- DefaultFile = "󰈙",
---
--- -- Git
--- GitBranch = "",
--- GitAdd = "",
--- GitChange = "",
--- GitDelete = "",
--- GitConflict = "",
--- GitIgnored = "◌",
--- GitRenamed = "➜",
--- GitSign = "▎",
--- GitStaged = "✓",
--- GitUnstaged = "✗",
--- GitUntracked = "★",
---
--- -- DAP
--- DapBreakpoint = "",
--- DapBreakpointCondition = "",
--- DapBreakpointRejected = "",
--- DapLogPoint = ".>",
--- DapStopped = "󰁕",
---
--- -- Telescope
--- PromptPrefix = "❯",
---
--- -- Nvim-lightbulb
--- Lightbulb = "💡",
---
--- -- Alpha
+-- Alpha
 -- GreeterNew = "",
 -- GreeterRecent = "",
 -- GreeterYazi = "",
@@ -457,8 +392,6 @@ return {
 -- MasonUninstalled = "✗",
 -- MasonPending = "⟳",
 --
--- -- Render-markdown
--- RenderMarkdown = { ' ', ' ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' }
 
 -- NOTE:
 -- Nixify: 
@@ -476,6 +409,7 @@ return {
 --      
 --    
 
+-- NOTE: BIGGER ICONS
 -- NOTE:
 -- ai:      compiler: 
 -- lsp:   
