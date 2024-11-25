@@ -23,23 +23,26 @@
 --      -> Render-markdown
 
 return {
-  -- Which-key
-  Action = "󰮯",
-  Buffer = "", -- 󰓩
-  Compiler = "",
-  Debugger = "",
-  Docs = "",
-  Find = "", -- 
-  Git = "",
-  LSP = "", -- 
-  Packages = "",
-  Quit = "",
-  Run = "", -- 󰑮
-  Session = "", -- 󱂬
-  Sort = "", -- 󰒺
-  Terminal = "",
-  Test = "", -- 󰙨
-  UI = "", --  
+
+  -- NOTE: WHICH-KEY
+
+  Action = "󰮯 ",
+  Buffer = " ", -- 󰓩
+  Compiler = " ",
+  Debugger = " ",
+  Docs = " ",
+  Find = " ",
+  Git = " ",
+  LSP = " ", -- 
+  Neovim = " ",
+  Packages = " ",
+  Quit = " ",
+  Run = " ", -- 󰑮
+  Session = " ", -- 󱂬
+  Sort = " ", -- 󰒺
+  Terminal = " ",
+  Test = " ", -- 󰙨
+  UI = " ", --  
 
   -- Heirline-components - tabline
   BufferClose = "󰅖",
@@ -135,11 +138,133 @@ return {
   RenderMarkdown = { ' ', ' ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
 
   -- Custom
-  Delete = ""
+  Delete = " "
 }
 
--- TODO: implement icons
--- NOTE: https://github.com/LunarVim/Launch.nvim/blob/master/lua/user/icons.lua
+-- NOTE: START
+
+-- TODO: icons NormalNivm
+-- https://github.com/NormalNvim/NormalNvim/blob/main/lua/base/icons/icons.lua
+
+-- NOTE: see pommodoro video, icon = '󰅶' 󰍡 󰈸 󰽥 󱄅  󰇮
+--  󰖟 󰷐 󰌠 󰴭 󰓻 󰌌 󰗀  󰡨 󰌷 󰃤 󰀫 󰜎 
+-- 󰀠 󰀚 󰀦 󰢚 󰀫 󰀬 󰗗 󰀯 󰗘 󰳨 󰵈 󰮬 󰎑
+-- 󱆃 󰂵 󰚑 󰧑 󰃢 󰃣 󰳳 󰗝 󰻝  󰘸 󰝴 󰞷
+-- 󰎠 󰚤 󰟢 󰐥 󰐪 󰿘 󰚧 󰐰 󰐟
+-- 󰐼 󰢎 󰑴 󰒲 󰚌 󰒺 󰓆 󰣀 󰓙 󱔁
+-- 󰓹
+-- 󰜺 󰣖 󰙀 󰆍 󰨾 󱃘 󰆙 󰓹 󱈸 󰈉 󰛐
+-- 󰭎 󰓾 󰔌 󰦨 󱎫
+-- move to: 󱁥
+-- compare: 󰆊
+-- 󰆕 󰆣 󰙴 󰆞 󰆴 󰇂 󰾰
+-- 󰱣 󰗮 󱡷
+--  󰤖 󰸆  󱊕 󱊖 󱊗 󱊘 󱊙 󱗃
+
+-- NOTE: BIGGER ICONS
+-- 󰸞 󰪛 󱎸 󰽤  ●󰕛 󰕜 󰉋 󱔢   󰎔  ?
+-- 󰺮       
+--   󰠥   
+--      
+--             
+--        
+--         
+--                 
+--               
+--        
+--  
+--    
+-- 󱋣 󰲂 󰉋 󰚝 󱍓  󰖷 󰟵 󱩼 󰻲 󰟀 󰭟 󰋊 󰷐 󰐪
+--        󰣉 󰙏
+--      
+-- 󰇗 󰽉 󰇚 󰇮 󰺢 󰇾 󰥣 󰈇 󰈈 󰈊 󰈊 󰈲 
+-- 󰵲 󰊓 󰊠 󰊢 󰋦 󰠬 󰌌 󰌨 󰌷 󰌽 󰌵      
+-- 󰕒      󰀡 󰜎
+-- 󰇮 󰆼 󰁯 󰘨  󰦪 󰛖          
+--             󰡰    
+--             
+--             
+--                 
+--           
+--            󰒓
+--        󰏪       
+--            
+--             
+--           
+--            
+--           
+--          
+--        
+--      󰘨
+-- NOTE:
+-- actions:
+--   󰮯 󰑮             
+--           
+--            
+--               
+--               
+--             
+--           
+-- ai:    
+-- zen: 
+-- delete:   
+-- alert:     󱡝 
+-- arrow:                   󰊍  
+-- buffers:        󰕮
+-- checkhealth:       󱖫 󰩂 󰿶 
+-- colorschemes:   
+-- commands:       
+-- comments:     󱐐 󱜸 󱐑 󱋑 󱐏 󰭺 󰻞   󰗞 󰠗 󱗡 󰆈 󰨺 󱗟 󰧥 󱖰
+-- compiler: 
+-- config:     
+-- dashboard:
+-- toggle:      
+-- database:
+-- debug: 
+-- directory:  󰇖
+-- docs:     󰓫      
+-- files:  󱞞    
+-- find:    
+-- flash:    
+-- fzf: 󱡠
+-- git:   󰊢  󰽜 
+-- harpoon: 󱡀
+-- highlights: 
+-- lazy: 󰒲 󰒳
+-- logos:           
+-- lsp:     
+-- macros: 󰮯  
+-- mason:   󱌢
+-- motion: 󱖲
+-- mouse:  -> hardline plugin
+-- neotree: 
+-- notifications:   
+-- packages:  
+-- pomodoro:      
+-- power: ⏻
+-- prefixer: 
+-- project: 󰐱 diagram    sitemap:  certificate: 
+-- save: 󰆔  󰉉 󰆓  󰘛
+-- scratchpads: 
+-- session/quit:     
+-- sniper:  󰣉
+-- sort:           󰒼 󰒽 󰒿 
+-- split: 󰤻 󰤼
+-- sudo:          
+-- tabs: 
+-- tailwind: 󱏿
+-- telescope: 󰭎  
+-- test    
+-- translate: 󰗊 
+-- treesitter:  
+-- trouble: 󰙅
+-- vanish: 󰟼        󰀸 󱓽
+-- virus: 󱎶  
+-- window:        󰘖 󰘕 󰨤 󰁁 󰁨  󰴣 󰴤 󰕮    
+-- yank:   
+-- 󰙬 󱈓 󰙮 󰧻 󰃉
+
+-- TODO: https://github.com/LunarVim/Launch.nvim/blob/master/lua/user/icons.lua
 -- return {
 --   kind = {
 --     Array = " ",
@@ -299,150 +424,3 @@ return {
 --   },
 -- }
 
--- NOTE: ORG
-
--- TODO: icons NormalNivm
--- https://github.com/NormalNvim/NormalNvim/blob/main/lua/base/icons/icons.lua
-
--- NOTE: see pommodoro video, icon = '󰅶' 󰍡 󰈸 󰽥 󱄅  󰇮
---  󰖟 󰷐 󰌠 󰴭 󰓻 󰌌 󰗀  󰡨 󰌷 󰃤 󰀫 󰜎 
--- dashboard: 󰕮 telescope 󰭎 trouble 󰙅 fzf: 󱡠 harpoon: 󱡀
--- lazy: 󰒲
--- mason: 󱌢
--- neotree: 󰙅
--- git 󰊢
--- 󱋣 󰲂 󰉋 󰚝 󱍓  󰖷 󰟵 󱩼 󰻲 󰟀 󰭟 󰋊 󰷐 󰐪
--- 󰇮 󰆼 󰁯 󰘨  󰦪 󰛖          
---             󰡰    
---               
---                 
---               
---             
---               󰒓
---        󰏪       
---            
---              
---            
---            
---            
---           
---           
---          󰘨
--- power: ⏻
--- git:  󰽜
--- 
--- motion: 󱖲
--- 󰀠 󰀚 󰀦 󰢚 󰀫 󰀬 󰗗 󰀯 󰗘 󰳨 󰵈 󰮬 󰎑
--- 󱆃 󰂵 󰚑 󰧑 󰃢 󰃣 󰳳 󰗝 󰻝  󰘸 󰝴 󰞷 󰆓
--- 󰎠 󰚤 󰟢 󰐥 󰐪 󰿘 󰚧 󰐰 󰐟
--- 󰐼 󰢎 󰑴 󰒲 󰚌 󰒺 󰓆 󰣀 󰓙 󱔁
--- 󰓹
---         󰣉 󰙏
---            
--- 󰇗 󰽉 󰇚 󰇮 󰺢 󰇾 󰥣 󰈇 󰈈 󰈊 󰈊 󰈲 󰉉 
--- 󰵲 󰉁 󰊍 󰊓 󰊠 󰊢 󰋦 󰠬 󰌌 󰌨 󰌷 󰌽 󰌵      
--- 󰕒            󰀡 󰜎
--- tailwind: 󱏿
--- database: nerd fonts database
--- markdown table: 󰓫
--- 󰜺 󰣖 󰙀 󰆍 󰨾 󱃘 󰆙 󰓹 󱈸 󰈉 󰛐
--- 󰭎 󰓾 󰔌 󰦨 󱎫
--- move to: 󱁥
--- translate: 󰗊
--- compare: 󰆊
--- 󰆕 󰆣 󰙴 󰆞 󰆴 󰇂 󰾰
--- 󰱣 󰗮 󱡷 󰇖
--- doctor: 󰩂 󰿶 
--- tree: 
--- replace all: 
--- split:
--- scratchpads: 
--- actions: 
--- rails: 
--- debug: 
--- vanish: 󰟼            󰀸 󱓽
--- quit: 󰗽
--- window:         󰘖 󰘕 󰨤 󰁁 󰁨  󰴣 󰴤 󱡝 󰕮    
--- split: 󰤻 󰤼
--- alert:
--- virus: 󱎶  
---   󰩹 󰤖 󰸆  󱊕 󱊖 󱊗 󱊘 󱊙 󱗃
--- project: 󰙬 󱈓 󰙮 󰧻 󰃉
--- hidden files:  󱞞 
---  dismiss  󱐐 󱜸 󱐑 󱋑 󱐏 󰭺 󰻞 󰗞 󰠗 󱗡 󰆈 󰨺 󱗟 󰧥 󱖰  
--- Macros:  󰮯
--- ai: 
--- debug: nerd font nf-md-pan_down
--- disable lazy plugin: 󰒳
--- sort: 󰒼 󰒽 󰒿
-
--- Markdown: 
-
--- Alpha
--- GreeterNew = "",
--- GreeterRecent = "",
--- GreeterYazi = "",
--- GreeterSessions = "",
--- GreeterProjects = "󰐱",
--- GreeterPlug = "",
--- GreeterQuit = "",
---
--- -- Mason
--- MasonInstalled = "✓",
--- MasonUninstalled = "✗",
--- MasonPending = "⟳",
---
-
--- NOTE:
--- Nixify: 
--- Neovim: 
--- 󰸞 󰪛 󱎸 󰽤  ●󰕛 󰕜 󰉋 󱔢   󰎔  ?
--- 󰺮         
---   󰠥     
---            
---               
---           
---         
---                   
---               
---         
---      
---    
-
--- NOTE: BIGGER ICONS
--- NOTE:
--- ai:      compiler: 
--- lsp:   
--- sort:          
--- actions:
---   󰮯 󰑮               
---                 
---                 
---                
---                    
---              
---       
--- danger:    
--- macros: 󰮯   
--- config:       sudo:   
--- toggle/colorschemes:     
--- highlights: 
--- picker/jump:  󰣉     flash: 
--- buffers:             
--- tabs:  󰝜
--- files: 󰆔                  yazi: 󰇥  neotree: 
--- telescope:     
--- notifications:    
--- treesitter:    aerial:     mason:   󱌢
--- lazy: 󰒲
--- pomodoro:      
--- git:  
--- docs/markdown:     
--- packages:  󰈏
--- checkhealth:       󱖫
--- test    
--- mouse:  -> hardline plugin
--- project: diagram    sitemap:  certificate: 
---       
--- prefixer: 
--- session:   

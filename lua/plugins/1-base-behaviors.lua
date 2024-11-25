@@ -596,7 +596,7 @@ return {
             pattern = "^"
           })
         end,
-        desc = "Jump to a line in buffer"
+        desc = "  Jump to a line in buffer"
       },
     },
   },
