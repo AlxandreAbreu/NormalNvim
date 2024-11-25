@@ -25,6 +25,7 @@
 --       -> nvim-lightbulb         [lightbulb for code actions]
 --       -> hot-reload.nvim        [config reload]
 --       -> distroupdate.nvim      [distro update]
+--       -> distroupdate.nvim      [distro update]
 
 local is_android = vim.fn.isdirectory('/data') == 1 -- true if on android
 

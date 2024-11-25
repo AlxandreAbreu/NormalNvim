@@ -4,6 +4,7 @@
 --    Sections:
 --       ## TREE SITTER
 --       -> nvim-treesitter                [syntax highlight]
+--       -> nvim-treesitter-context        [syntax highlight]
 --       -> ts-comments.nvim               [treesitter comments]
 --       -> render-markdown.nvim           [normal mode markdown]
 --       -> nvim-highlight-colors          [hex colors]
@@ -130,6 +131,15 @@ return {
       -- calling setup() here is necessary to enable conceal and some features.
       require("nvim-treesitter.configs").setup(opts)
     end,
+  },
+
+  -- NOTE:
+  -- nvim-treesitter-context
+  -- https://github.com/nvim-treesitter/nvim-treesitter-context
+  {
+      "nvim-treesitter/nvim-treesitter-context",
+      event = "VeryLazy",
+      opts = {},
   },
 
   -- ts-comments.nvim [treesitter comments]
