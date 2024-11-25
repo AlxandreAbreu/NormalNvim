@@ -69,19 +69,21 @@ local maps = require("base.utils").get_mappings_template()
 
 -- icons displayed on which-key.nvim ---------------------------------------
 local icons = {
-  f = { desc = get_icon("Find", true) .. " Find" },
-  p = { desc = get_icon("Packages", true) .. " Packages" },
-  l = { desc = get_icon("LSP", true) .. " LSP" },
-  u = { desc = get_icon("UI", true) .. " UI" },
+  a = { desc = get_icon("Action", true) .. " Actions" },
   b = { desc = get_icon("Buffer", true) .. " Buffers" },
   bs = { desc = get_icon("Sort", true) .. " Sort Buffers" },
   c = { desc = get_icon("Run", true) .. " Compiler" },
   d = { desc = get_icon("Debugger", true) .. " Debugger" },
-  tt = { desc = get_icon("Test", true) .. " Test" },
   dc = { desc = get_icon("Docs", true) .. " Docs" },
+  f = { desc = get_icon("Find", true) .. " Find" },
   g = { desc = get_icon("Git", true) .. " Git" },
-  S = { desc = get_icon("Session", true) .. " Session" },
+  l = { desc = get_icon("LSP", true) .. " LSP" },
+  p = { desc = get_icon("Packages", true) .. " Packages" },
+  q = { desc = get_icon("Quit", true) .. " Quit" },
+  s = { desc = get_icon("Session", true) .. " Session" },
   t = { desc = get_icon("Terminal", true) .. " Terminal" },
+  tt = { desc = get_icon("Test", true) .. " Test" },
+  u = { desc = get_icon("UI", true) .. " UI" },
 }
 
 -- NOTE: GENERAL KEYMAPS
@@ -120,12 +122,9 @@ maps.v["<A-k>"] = { ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv",
 
 maps.n["<C-s>"] = { "<cmd>w!<cr>", desc = "Force write" }
 maps.i["<C-BS>"] = { "<C-W>", desc = "Enable CTRL+backsace to delete" }
-maps.n["0"] =
-{ "^", desc = "Go to the fist character of the line" }
-maps.n["«"] =
-{ "$", desc = "Go to the last character of the line" }
-maps.n["»"] =
-{ "0", desc = "Go to the first position of the line" }
+maps.n["0"] = { "^", desc = "Go to the fist character of the line" }
+maps.n["«"] = { "$", desc = "Go to the last character of the line" }
+maps.n["»"] = { "0", desc = "Go to the first position of the line" }
 
 -- Navigation, find and center page
 maps.n["n"] = { "nzzzv", desc = "Find forwards and center" }
@@ -248,20 +247,21 @@ else
 end
 
 -- NOTE: QUIT NEOVIM
+maps.n["<leader>q"] = icons.q
 maps.n["<leader>qq"] = {
-  function()
-    -- Ask user for confirmation
-    local choice = vim.fn.confirm("Do you really want to exit nvim?", "&Yes\n&No", 2)
-    if choice == 1 then
-      -- If user confirms, but there are still files to be saved: Ask
-      vim.cmd('confirm quit')
-    end
-  end,
+  -- function()
+  --   -- Ask user for confirmation
+  --   local choice = vim.fn.confirm("Do you really want to exit nvim?", "&Yes\n&No", 2)
+  --   if choice == 1 then
+  --     -- If user confirms, but there are still files to be saved: Ask
+  --     vim.cmd('confirm quit')
+  --   end
+  -- end,
+  "<cmd>wqa<cr>",
   desc = " Quit Neovim",
 }
 
-maps.n["<leader>qf"] = { "<cmd>qall<cr>", desc = " Quit Neovim" }
-maps.n["<leader>qs"] = { "<cmd>wqa<cr>", desc = "󰆔 Save all files and quit" }
+maps.n["<leader>qf"] = { "<cmd>qall<cr>", desc = " Force quit Neovim" }
 
 maps.n["<Tab>"] = {
   "<Tab>",
@@ -842,7 +842,7 @@ end
 
 -- session manager ---------------------------------------------------------
 if is_available("neovim-session-manager") then
-  maps.n["<leader>s"] = icons.S
+  maps.n["<leader>s"] = icons.s
   maps.n["<leader>sl"] = {
     "<cmd>SessionManager! load_last_session<cr>",
     desc = " Load last session",
@@ -1021,7 +1021,7 @@ if is_available("telescope.nvim") then
     function() require("telescope.builtin").registers() end,
     desc = "Find vim registers",
   }
-  maps.n["<leader>ft"] = {
+  maps.n["<leader>fc"] = {
     function()
       -- load color schemes before listing them
       pcall(vim.api.nvim_command, "doautocmd User LoadColorSchemes")
@@ -1759,7 +1759,7 @@ if is_autoformat_enabled and is_filetype_allowed and is_filetype_ignored then
 end
 
 -- NOTE: ACTIONS
-maps.n["<leader>a"] = icons.b
+maps.n["<leader>a"] = icons.a
 maps.v["<leader>as"] =  { "<cmd>sort<cr>", desc = "Sort selection range" }
 maps.n["<leader>adb"] = { "<cmd>g /^$/d<cr>", desc = "Delete all the blank lines" }
 
