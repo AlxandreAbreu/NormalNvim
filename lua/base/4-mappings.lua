@@ -392,7 +392,7 @@ maps.n["<leader>ba"] = {
   desc = "󰆔  Write all changed buffers",
 }
 maps.n["<leader>bc"] = {
-  "<cmd>ggVG",
+  "ggVG<cr>",
   desc = "Select the buffer content",
 }
 maps.n["<leader>bk"] = {
