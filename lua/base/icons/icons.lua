@@ -33,7 +33,7 @@ return {
   Docs = " ",
   Find = " ",
   Git = " ",
-  Insert = " ",
+  Insert = " ",
   LSP = " ", -- 
   Neovim = " ",
   Packages = " ",
@@ -211,7 +211,7 @@ return {
 --           
 --          
 -- ai:    
--- insert: 
+-- insert:  
 -- regex:   
 -- zen: 
 -- delete:   
