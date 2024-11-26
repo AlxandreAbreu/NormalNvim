@@ -143,8 +143,11 @@ maps.v["<A-k>"] = { ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv",
 maps.n["<C-s>"] = { "<cmd>w!<cr>", desc = "Force write" }
 maps.i["<C-BS>"] = { "<C-W>", desc = "Enable CTRL+backsace to delete" }
 maps.n["0"] = { "^", desc = "Go to the fist character of the line" }
+maps.v["0"] = { "^", desc = "Go to the fist character of the line" }
 maps.n["«"] = { "$", desc = "Go to the last character of the line" }
 maps.n["»"] = { "0", desc = "Go to the first position of the line" }
+maps.v["»"] = { "0", desc = "Go to the first position of the line" }
+maps.v["«"] = { "$", desc = "Go to the last character of the line" }
 
 -- Navigation, find and center page
 maps.n["n"] = { "nzzzv", desc = "Find forwards and center" }
@@ -482,6 +485,10 @@ maps.n["<leader>k"] = {
 maps.n["<leader>c"] = {
   function() require("heirline-components.buffer").close() end,
   desc = "  Close buffer, keep window",
+}
+maps.n["<leader>q"] = {
+  "<cmd>bdelete!<cr>",
+  desc = "  Force close buffer",
 }
 maps.n["º"] = {
   function()
@@ -1947,8 +1954,7 @@ vim.api.nvim_set_keymap('n', '<leader>ar', ':CutLinesCreatedBlanks<cr>',
 maps.n["<leader>n"] = icons.n
 
 -- TODO: refactor to functions
-
--- Function to insert a code block
+-- Function to insert a code block, position the cursor, and enter insert mode
 function InsertCodeBlock()
     local code_block = {
         "``` shell",
@@ -1956,6 +1962,11 @@ function InsertCodeBlock()
         "```",
     }
     vim.api.nvim_put(code_block, 'l', true, true)
+    -- Move the cursor to the middle line of the code block
+    local row, col = vim.fn.line('.'), vim.fn.col('.')
+    vim.api.nvim_win_set_cursor(0, {row - 1, 1})
+    -- Enter insert mode
+    vim.cmd('startinsert')
 end
 
 -- Create the custom command
@@ -1968,12 +1979,11 @@ vim.api.nvim_set_keymap('n', '<leader>is', ':InsertCodeBlock<CR>', {
   desc = "  Insert shell block",
   noremap = true, silent = true })
 
+
 -- NOTE: INSERT
 maps.n["<leader>i"] = icons.i
 
--- NOTE: MARKDOWN
-maps.n["<leader>m"] = icons.m
-maps.n["<leader>mi"] =  { "", desc = "  Insert shell block" }
+
 
 utils.set_mappings(maps)
 return M
