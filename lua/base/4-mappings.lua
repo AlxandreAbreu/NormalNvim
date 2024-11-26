@@ -2001,6 +2001,9 @@ vim.api.nvim_set_keymap('n', '<leader>ar', ':CutLinesCreatedBlanks<cr>',
 -- NOTE: NEOVIM
 maps.n["<leader>n"] = icons.n
 
+-- NOTE: INSERT
+maps.n["<leader>i"] = icons.i
+
 -- TODO: refactor to functions
 -- Function to insert a code block, position the cursor, and enter insert mode
 function InsertCodeBlock()
@@ -2012,7 +2015,7 @@ function InsertCodeBlock()
     vim.api.nvim_put(code_block, 'l', true, true)
     -- Move the cursor to the middle line of the code block
     local row, col = vim.fn.line('.'), vim.fn.col('.')
-    vim.api.nvim_win_set_cursor(0, {row - 1, 1})
+    vim.api.nvim_win_set_cursor(0, {row - 2, 0})
     -- Enter insert mode
     vim.cmd('startinsert')
 end
@@ -2023,13 +2026,9 @@ vim.api.nvim_create_user_command('InsertCodeBlock', function()
 end, { nargs = 0 })
 
 -- Set up the keybinding
-vim.api.nvim_set_keymap('n', '<leader>is', ':InsertCodeBlock<CR>', {
+vim.api.nvim_set_keymap('n', '<leader>is', ':InsertCodeBlock<cr>', {
   desc = "  Insert shell block",
   noremap = true, silent = true })
-
-
--- NOTE: INSERT
-maps.n["<leader>i"] = icons.i
 
 
 
