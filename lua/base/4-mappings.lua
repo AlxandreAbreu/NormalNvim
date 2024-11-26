@@ -2054,10 +2054,12 @@ function OpenMarkdownSection()
 
         -- Check if the file is already open in a buffer
         local buf_exists = false
+        local buf_number
         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
             if vim.api.nvim_buf_get_name(buf) == full_path then
                 vim.api.nvim_set_current_buf(buf)
                 buf_exists = true
+                buf_number = buf
                 break
             end
         end
@@ -2065,7 +2067,12 @@ function OpenMarkdownSection()
         if not buf_exists then
             -- Open the file in a new buffer if it's not already open
             vim.cmd('edit ' .. full_path)
+            buf_number = vim.fn.bufnr('%')
         end
+
+        -- Ensure the buffer is listed
+        vim.api.nvim_buf_set_option(buf_number, 'buflisted', true)
+        vim.api.nvim_set_current_buf(buf_number)
 
         if anchor then
             -- Use a precise search pattern for the anchor
