@@ -163,6 +163,9 @@ return {
 -- 󰱣 󰗮 󱡷
 --  󰤖 󰸆  󱊕 󱊖 󱊗 󱊘 󱊙 󱗃
 
+-- NOTE: NVIM-WEB-DEVICONS
+-- Run :NvimWebDeviconsHiTest to see all icons and their highlighting
+
 -- NOTE: BIGGER ICONS
 -- 󰸞 󰪛 󱎸 󰽤  ●󰕛 󰕜 󰉋 󱔢   󰎔  ?
 -- 󰺮     

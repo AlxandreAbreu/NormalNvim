@@ -564,9 +564,33 @@ return {
     enabled = not vim.g.fallback_icons_enabled,
     event = "User BaseDefered",
     opts = {
+      strict = true;
+
       override = {
         default_icon = {
           icon = require("base.utils").get_icon("DefaultFile")
+        },
+      },
+      override_by_extension = {
+        ["js"] = {
+          icon = "",
+          color = "#cbcb41",
+          name = "JS"
+        },
+        ["rb"] = {
+          icon = "",
+          color = "#EF0909",
+          name = "Ruby",
+        },
+        ["sh"] = {
+          icon = "",
+          color = "#81e043",
+          name = "Shell",
+        },
+        ["html"] = {
+          icon = "",
+          color = "#ff3300",
+          name = "Html",
         },
       },
     },
