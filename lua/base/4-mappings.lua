@@ -80,7 +80,9 @@ local icons = {
   dc = { desc = get_icon("Docs", true) .. " Docs" },
   f = { desc = get_icon("Find", true) .. " Find" },
   g = { desc = get_icon("Git", true) .. " Git" },
+  i = { desc = get_icon("Insert", true) .. " Insert" },
   l = { desc = get_icon("LSP", true) .. " LSP" },
+  m = { desc = get_icon("Markdown", true) .. " Markdown" },
   n = { desc = get_icon("Neovim", true) .. " Neovim" },
   p = { desc = get_icon("Packages", true) .. " Packages" },
   s = { desc = get_icon("Session", true) .. " Session" },
@@ -1859,38 +1861,38 @@ vim.api.nvim_set_keymap('n', '<leader>add', ':lua remove_duplicates()<cr>',
 -- Function to cut lines containing a specific word, save them to the
 -- clipboard, remove only the created blank lines, and notify
 function CutLinesAndRemoveCreatedBlanks()
-    local word = vim.fn.input("Enter the word: ")
-    local lines_to_cut = {}
-    local lines_to_remove = {}
+  local word = vim.fn.input("Enter the word: ")
+  local lines_to_cut = {}
+  local lines_to_remove = {}
 
-    -- Find lines containing the word and mark them for removal
-    for i = 1, vim.fn.line('$') do
-        local line = vim.fn.getline(i)
-        if line:find(word) then
-            table.insert(lines_to_cut, line)
-            table.insert(lines_to_remove, i)
-        end
-    end
+  -- Find lines containing the word and mark them for removal
+  for i = 1, vim.fn.line('$') do
+      local line = vim.fn.getline(i)
+      if line:find(word) then
+          table.insert(lines_to_cut, line)
+          table.insert(lines_to_remove, i)
+      end
+  end
 
-    -- Remove marked lines
-    for i = #lines_to_remove, 1, -1 do
-        vim.fn.setline(lines_to_remove[i], "")
-    end
+  -- Remove marked lines
+  for i = #lines_to_remove, 1, -1 do
+      vim.fn.setline(lines_to_remove[i], "")
+  end
 
-    -- Remove only the blank lines created by the cut operation
-    for i = vim.fn.line('$'), 1, -1 do
-        if vim.fn.getline(i) == "" and i == lines_to_remove[#lines_to_remove] then
-            vim.fn.deletebufline('%', i)
-            table.remove(lines_to_remove)
-        end
-    end
+  -- Remove only the blank lines created by the cut operation
+  for i = vim.fn.line('$'), 1, -1 do
+      if vim.fn.getline(i) == "" and i == lines_to_remove[#lines_to_remove] then
+          vim.fn.deletebufline('%', i)
+          table.remove(lines_to_remove)
+      end
+  end
 
-    -- Join lines with newline character and save to clipboard
-    local text = table.concat(lines_to_cut, "\n")
-    vim.fn.setreg('+', text)
+  -- Join lines with newline character and save to clipboard
+  local text = table.concat(lines_to_cut, "\n")
+  vim.fn.setreg('+', text)
 
-    -- Notify how many lines were cut
-    notify(#lines_to_cut .. " lines were cut and saved to the clipboard", "info")
+  -- Notify how many lines were cut
+  notify(#lines_to_cut .. " lines were cut and saved to the clipboard", "info")
 end
 
 -- Function to cut lines containing a specific word, save them to the clipboard, remove all blank lines in the file, and notify
@@ -1943,6 +1945,35 @@ vim.api.nvim_set_keymap('n', '<leader>ar', ':CutLinesCreatedBlanks<cr>',
 
 -- NOTE: NEOVIM
 maps.n["<leader>n"] = icons.n
+
+-- TODO: refactor to functions
+
+-- Function to insert a code block
+function InsertCodeBlock()
+    local code_block = {
+        "``` shell",
+        "",
+        "```",
+    }
+    vim.api.nvim_put(code_block, 'l', true, true)
+end
+
+-- Create the custom command
+vim.api.nvim_create_user_command('InsertCodeBlock', function()
+    InsertCodeBlock()
+end, { nargs = 0 })
+
+-- Set up the keybinding
+vim.api.nvim_set_keymap('n', '<leader>is', ':InsertCodeBlock<CR>', {
+  desc = "  Insert shell block",
+  noremap = true, silent = true })
+
+-- NOTE: INSERT
+maps.n["<leader>i"] = icons.i
+
+-- NOTE: MARKDOWN
+maps.n["<leader>m"] = icons.m
+maps.n["<leader>mi"] =  { "", desc = "  Insert shell block" }
 
 utils.set_mappings(maps)
 return M
