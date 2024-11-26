@@ -74,6 +74,7 @@ local icons = {
   a = { desc = get_icon("Action", true) .. " Actions" },
   ad = { desc = get_icon("Delete", true) .. " Delete" },
   b = { desc = get_icon("Buffer", true) .. " Buffers" },
+  bg = { desc = get_icon("Scratchpads", true) .. " Scratchpads" },
   bs = { desc = get_icon("Sort", true) .. " Sort Buffers" },
   c = { desc = get_icon("Compiler", true) .. " Compiler" },
   d = { desc = get_icon("Debugger", true) .. " Debugger" },
@@ -402,8 +403,56 @@ maps.n["<leader>ba"] = {
 }
 maps.n["<leader>bc"] = {
   "ggVG<cr>",
-  desc = "Select the buffer content",
+  desc = "  Select the buffer content",
 }
+
+-- NOTE: SCRATCHPADS
+maps.n["<leader>bg"] = icons.bg
+  -- desc = "  Open markdown scratchpad",
+
+-- Function to open a scratchpad with proper filename display
+function OpenScratchpad(filename)
+    vim.cmd('tabnew')
+    vim.cmd('edit ' .. filename)
+end
+
+-- Create keybindings for specific scratchpads
+vim.api.nvim_set_keymap('n', '<leader>bgm',
+  ':lua OpenScratchpad("~/tmp/test.md")<cr>', {
+    desc = "  Open a markdown scratchpad",
+    noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>bgj',
+  ':lua OpenScratchpad("~/tmp/test.js")<cr>', {
+    desc = "  Open a javascript scratchpad",
+    noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>bgc',
+  ':lua OpenScratchpad("~/tmp/test.css")<cr>', {
+    desc = "  Open a css scratchpad",
+    noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>bgh',
+  ':lua OpenScratchpad("~/tmp/test.html")<cr>', {
+    desc = "  Open a html scratchpad",
+    noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>bgp',
+  ':lua OpenScratchpad("~/tmp/test.py")<cr>', {
+    desc = "  Open a python scratchpad",
+    noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>bgr',
+  ':lua OpenScratchpad("~/tmp/test.rb")<cr>', {
+    desc = "  Open a ruby scratchpad",
+    noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>bgs',
+  ':lua OpenScratchpad("~/tmp/test.sh")<cr>', {
+    desc = "  Open a shell scratchpad",
+    noremap = true, silent = true })
+
+
 maps.n["<leader>bk"] = {
   function() require("heirline-components.buffer").close_all() end,
   desc = "  Close all buffers",
