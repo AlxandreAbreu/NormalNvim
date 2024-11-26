@@ -181,6 +181,7 @@ return {
           local stats = require("lazy").stats()
           stats.real_cputime = not is_windows
           local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
+          -- FIX: displays always 2 plugins...
           opts.section.footer.val = {
             -- " ",
             " ",

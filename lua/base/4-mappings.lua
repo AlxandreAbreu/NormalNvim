@@ -2005,17 +2005,18 @@ maps.n["<leader>n"] = icons.n
 maps.n["<leader>i"] = icons.i
 
 -- TODO: refactor to functions
--- Function to insert a code block, position the cursor, and enter insert mode
+-- Function to insert a code block at the cursor position, position the cursor, and enter insert mode
 function InsertCodeBlock()
     local code_block = {
         "``` shell",
         "",
         "```",
     }
-    vim.api.nvim_put(code_block, 'l', true, true)
+    -- Insert code block at the cursor position
+    vim.api.nvim_put(code_block, 'c', true, true)
     -- Move the cursor to the middle line of the code block
-    local row, col = vim.fn.line('.'), vim.fn.col('.')
-    vim.api.nvim_win_set_cursor(0, {row - 2, 0})
+    local row = vim.fn.line('.')
+    vim.api.nvim_win_set_cursor(0, {row - 1, 5})  -- Adjust the cursor to be inside the code block
     -- Enter insert mode
     vim.cmd('startinsert')
 end
@@ -2026,11 +2027,82 @@ vim.api.nvim_create_user_command('InsertCodeBlock', function()
 end, { nargs = 0 })
 
 -- Set up the keybinding
-vim.api.nvim_set_keymap('n', '<leader>is', ':InsertCodeBlock<cr>', {
+vim.api.nvim_set_keymap('n', '<leader>is', ':InsertCodeBlock<CR>', {
   desc = "  Insert shell block",
   noremap = true, silent = true })
 
 
+-- TODO: move to functions
+-- TEST:
+-- Function to open a Markdown file and jump to a specific section
+function OpenMarkdownSection()
+    -- Get the line under the cursor
+    local line = vim.fn.getline('.')
+    -- Extract the file path and anchor from the link
+    local file, anchor = line:match('%[.-%]%((.-)#(.-)%)')
 
+    -- Handle case where only file path is provided (no anchor)
+    if not file then
+        file = line:match('%[.-%]%((.-)%)')
+    end
+
+    if file then
+        -- Resolve the file path relative to the current file's directory
+        local current_file = vim.fn.expand('%:p')
+        local current_dir = vim.fn.fnamemodify(current_file, ':h')
+        local full_path = vim.fn.fnamemodify(current_dir .. '/' .. file, ':p')
+
+        -- Check if the file is already open in a buffer
+        local buf_exists = false
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_get_name(buf) == full_path then
+                vim.api.nvim_set_current_buf(buf)
+                buf_exists = true
+                break
+            end
+        end
+
+        if not buf_exists then
+            -- Open the file if it's not already open
+            vim.cmd('edit ' .. full_path)
+        end
+
+        if anchor then
+            -- Use a precise search pattern for the anchor
+            local search_pattern = '\\V##\\s' .. anchor:gsub('%-', ' ')
+
+            -- Go to the start of the file before searching
+            vim.cmd('normal! gg')
+
+            -- Search for the anchor heading in the file
+            local found = vim.fn.search(search_pattern, 'W')
+
+            if found == 0 then
+                -- Attempt to search with case insensitivity as a fallback
+                local insensitive_search_pattern = '\\c##\\s' .. anchor:gsub('%-', ' '):lower()
+                found = vim.fn.search(insensitive_search_pattern, 'W')
+
+                if found == 0 then
+                    vim.api.nvim_err_writeln("Section not found: " .. anchor)
+                end
+            end
+        end
+    else
+        vim.api.nvim_err_writeln("No file link found at the cursor position")
+    end
+end
+
+-- Create the custom command
+vim.api.nvim_create_user_command('OpenMarkdownSection', function()
+    OpenMarkdownSection()
+end, { nargs = 0 })
+
+-- Set up the keybinding
+vim.api.nvim_set_keymap('n', 'gf', ':OpenMarkdownSection<CR>', { noremap = true, silent = true })
+-- TEST:
+
+
+
+-- NOTE: IMPORT MAPPINGS
 utils.set_mappings(maps)
 return M
