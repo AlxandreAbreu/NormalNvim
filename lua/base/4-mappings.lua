@@ -74,7 +74,6 @@ local icons = {
   a = { desc = get_icon("Action", true) .. " Actions" },
   ad = { desc = get_icon("Delete", true) .. " Delete" },
   b = { desc = get_icon("Buffer", true) .. " Buffers" },
-  bg = { desc = get_icon("Scratchpads", true) .. " Scratchpads" },
   bs = { desc = get_icon("Sort", true) .. " Sort Buffers" },
   c = { desc = get_icon("Compiler", true) .. " Compiler" },
   d = { desc = get_icon("Debugger", true) .. " Debugger" },
@@ -90,6 +89,7 @@ local icons = {
   t = { desc = get_icon("Terminal", true) .. " Terminal" },
   tt = { desc = get_icon("Test", true) .. " Test" },
   u = { desc = get_icon("UI", true) .. " UI" },
+  x = { desc = get_icon("Scratchpads", true) .. " Scratchpads" },
 }
 
 -- NOTE: GENERAL KEYMAPS
@@ -407,7 +407,7 @@ maps.n["<leader>bc"] = {
 }
 
 -- NOTE: SCRATCHPADS
-maps.n["<leader>bg"] = icons.bg
+maps.n["<leader>x"] = icons.x
   -- desc = "  Open markdown scratchpad",
 
 -- Function to open a scratchpad with proper filename display
@@ -417,41 +417,40 @@ function OpenScratchpad(filename)
 end
 
 -- Create keybindings for specific scratchpads
-vim.api.nvim_set_keymap('n', '<leader>bgm',
+vim.api.nvim_set_keymap('n', '<leader>xm',
   ':lua OpenScratchpad("~/tmp/test.md")<cr>', {
     desc = "  Open a markdown scratchpad",
     noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('n', '<leader>bgj',
+vim.api.nvim_set_keymap('n', '<leader>xj',
   ':lua OpenScratchpad("~/tmp/test.js")<cr>', {
     desc = "  Open a javascript scratchpad",
     noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('n', '<leader>bgc',
+vim.api.nvim_set_keymap('n', '<leader>xc',
   ':lua OpenScratchpad("~/tmp/test.css")<cr>', {
     desc = "  Open a css scratchpad",
     noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('n', '<leader>bgh',
+vim.api.nvim_set_keymap('n', '<leader>xh',
   ':lua OpenScratchpad("~/tmp/test.html")<cr>', {
     desc = "  Open a html scratchpad",
     noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('n', '<leader>bgp',
+vim.api.nvim_set_keymap('n', '<leader>xp',
   ':lua OpenScratchpad("~/tmp/test.py")<cr>', {
     desc = "  Open a python scratchpad",
     noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('n', '<leader>bgr',
+vim.api.nvim_set_keymap('n', '<leader>xr',
   ':lua OpenScratchpad("~/tmp/test.rb")<cr>', {
     desc = "  Open a ruby scratchpad",
     noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('n', '<leader>bgs',
+vim.api.nvim_set_keymap('n', '<leader>xs',
   ':lua OpenScratchpad("~/tmp/test.sh")<cr>', {
     desc = "  Open a shell scratchpad",
     noremap = true, silent = true })
-
 
 maps.n["<leader>bk"] = {
   function() require("heirline-components.buffer").close_all() end,
