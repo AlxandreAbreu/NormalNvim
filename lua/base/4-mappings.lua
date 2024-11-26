@@ -2063,7 +2063,7 @@ function OpenMarkdownSection()
         end
 
         if not buf_exists then
-            -- Open the file if it's not already open
+            -- Open the file in a new buffer if it's not already open
             vim.cmd('edit ' .. full_path)
         end
 
