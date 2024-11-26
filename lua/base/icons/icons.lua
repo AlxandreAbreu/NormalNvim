@@ -123,12 +123,12 @@ return {
   Lightbulb = "💡",
 
   -- Alpha
-  GreeterNew = "📄",
-  GreeterRecent = "🌺",
-  GreeterYazi = "🦆",
-  GreeterSessions = "🔎",
-  GreeterProjects = "💼",
-  GreeterPlug = "",
+  GreeterNew = " ",
+  GreeterRecent = " ",
+  GreeterYazi = "󰇥 ",
+  GreeterSessions = " ",
+  GreeterProjects = " ",
+  GreeterPlug = " ",
 
   -- Mason
   MasonInstalled = "✓",
@@ -180,7 +180,7 @@ return {
 --  
 --    
 -- 󱋣 󰲂 󰉋 󰚝 󱍓  󰖷 󰟵 󱩼 󰻲 󰟀 󰭟 󰋊 󰷐 󰐪
---        󰣉 󰙏
+--       󰣉 󰙏
 --      
 -- 󰇗 󰽉 󰇚 󰇮 󰺢 󰇾 󰥣 󰈇 󰈈 󰈊 󰈊 󰈲 
 -- 󰵲 󰊓 󰊢 󰋦 󰠬 󰌌 󰌨 󰌷 󰌽 󰌵      

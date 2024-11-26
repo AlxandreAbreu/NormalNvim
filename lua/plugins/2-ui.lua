@@ -90,14 +90,6 @@ return {
       -- }
       -- Generated with https://www.fancytextpro.com/BigTextGenerator/Larry3D
       -- dashboard.section.header.val = {
-      --   [[ __  __                  __  __                     ]],
-      --   [[/\ \/\ \                /\ \/\ \  __                ]],
-      --   [[\ \ `\\ \     __    ___ \ \ \ \ \/\_\    ___ ___    ]],
-      --   [[ \ \ , ` \  /'__`\ / __`\\ \ \ \ \/\ \ /' __` __`\  ]],
-      --   [[  \ \ \`\ \/\  __//\ \L\ \\ \ \_/ \ \ \/\ \/\ \/\ \ ]],
-      --   [[   \ \_\ \_\ \____\ \____/ \ `\___/\ \_\ \_\ \_\ \_\]],
-      --   [[    \/_/\/_/\/____/\/___/   `\/__/  \/_/\/_/\/_/\/_/]],
-      -- }
       --  dashboard.section.header.val = {
       --   '                                                     ',
       --   '  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ',
@@ -107,14 +99,6 @@ return {
       --   '  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ',
       --   '  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ',
       --   '                                                     ',
-      -- }
-      -- dashboard.section.header.val = {
-      --   [[                __                ]],
-      --   [[  ___   __  __ /\_\    ___ ___    ]],
-      --   [[/' _ `\/\ \/\ \\/\ \ /' __` __`\  ]],
-      --   [[/\ \/\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
-      --   [[\ \_\ \_\ \___/  \ \_\ \_\ \_\ \_\]],
-      --   [[ \/_/\/_/\/__/    \/_/\/_/\/_/\/_/]],
       -- }
 
       if is_android then
@@ -128,28 +112,20 @@ return {
         }
       else
         dashboard.section.header.val = {
-          [[888b      88                                                           88]],
-          [[8888b     88                                                           88]],
-          [[88 `8b    88                                                           88]],
-          [[88  `8b   88   ,adPPYba,   8b,dPPYba,  88,dPYba,,adPYba,   ,adPPYYba,  88]],
-          [[88   `8b  88  a8"     "8a  88P'   "Y8  88P'   "88"    "8a  ""     `Y8  88]],
-          [[88    `8b 88  8b       d8  88          88      88      88  ,adPPPPP88  88]],
-          [[88     `8888  "8a,   ,a8"  88          88      88      88  88,    ,88  88]],
-          [[88      `888   `"YbbdP"'   88          88      88      88  `"8bbdP"Y8  88]],
-          [[                                    __                ]],
-          [[                      ___   __  __ /\_\    ___ ___    ]],
-          [[                    /' _ `\/\ \/\ \\/\ \ /' __` __`\  ]],
-          [[                    /\ \/\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
-          [[                    \ \_\ \_\ \___/  \ \_\ \_\ \_\ \_\]],
-          [[                     \/_/\/_/\/__/    \/_/\/_/\/_/\/_/]],
+      '                    ▟▙                           ',
+      '                    ▝▘                           ',
+      '██▃▅▇█▆▖  ██▄  ▄██  ██  ▗▟█▆▄▄▆█▙▖            Z  ',
+      '██▛▔ ▝██  ▝██  ██▘  ██  ██▛▜██▛▜██        Z      ',
+      '██    ██   ▜█▙▟█▛   ██  ██  ██  ██     z         ',
+      '██    ██   ▝████▘   ██  ██  ██  ██   z           ',
+      '▀▀    ▀▀     ▀▀     ▀▀  ▀▀  ▀▀  ▀▀               ',
         }
       end
-
 
       local get_icon = require("base.utils").get_icon
 
       dashboard.section.header.opts.hl = "DashboardHeader"
-      vim.cmd("highlight DashboardHeader guifg=#F7778F")
+      vim.cmd("highlight DashboardHeader guifg=#81e043")
 
       -- If yazi is not installed, don't show the button.
       local is_yazi_installed = vim.fn.executable("ya") == 1
@@ -172,15 +148,22 @@ return {
         dashboard.button("p",
           get_icon("GreeterProjects") .. " Projects",
           "<cmd>Telescope projects<CR>"),
-        dashboard.button("", ""),
-        dashboard.button("q", "   Quit", "<cmd>exit<CR>"),
+        -- dashboard.button("", ""),
+        -- dashboard.button("q", "  Quit", "<cmd>exit<cr>"),
+        dashboard.button("q", "  Quit", "<cmd>quit!<cr>"),
       }
 
       -- Vertical margins
+      -- NOTE: default
+      -- dashboard.config.layout[1].val =
+      --     vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0) * 0.10) } -- Above header
+      -- dashboard.config.layout[3].val =
+      --     vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0) * 0.10) } -- Above buttons
+
       dashboard.config.layout[1].val =
-          vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0) * 0.10) } -- Above header
+          vim.fn.max { 3, vim.fn.floor(vim.fn.winheight(0) * 0.10) } -- Above header
       dashboard.config.layout[3].val =
-          vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0) * 0.10) } -- Above buttons
+          vim.fn.max { 3, vim.fn.floor(vim.fn.winheight(0) * 0.10) } -- Above buttons
 
       -- Disable autocmd and return
       dashboard.config.opts.noautocmd = true
@@ -199,14 +182,14 @@ return {
           stats.real_cputime = not is_windows
           local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
           opts.section.footer.val = {
-            " ",
+            -- " ",
             " ",
             " ",
             "Loaded " .. stats.loaded .. " plugins " .. footer_icon .. " in " .. ms .. "ms",
             ".............................",
           }
           opts.section.footer.opts.hl = "DashboardFooter"
-          vim.cmd("highlight DashboardFooter guifg=#D29B68")
+          vim.cmd("highlight DashboardFooter guifg=#81e043")
           pcall(vim.cmd.AlphaRedraw)
         end,
       })

@@ -845,7 +845,7 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
 
 -- alpha-nvim --------------------------------------------------------------
 if is_available("alpha-nvim") then
-  maps.n["<leader>h"] = {
+  maps.n["<leader>bh"] = {
     function()
       local wins = vim.api.nvim_tabpage_list_wins(0)
       if #wins > 1
@@ -857,7 +857,7 @@ if is_available("alpha-nvim") then
       require("alpha").start(false, require("alpha").default_config)
       vim.b.miniindentscope_disable = true
     end,
-    desc = " Home screen",
+    desc = "  Go to dashboard",
   }
 end
 
