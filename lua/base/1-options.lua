@@ -91,3 +91,11 @@ vim.g.notifications_enabled = true -- Enable notifications.
 vim.g.semantic_tokens_enabled = true -- Enable lsp semantic tokens at start.
 vim.g.url_effect_enabled = true -- Highlight URLs with an underline effect.
 
+-- MARKDOWN
+-- So that `` is visible in markdown files (default: 1)
+-- opt.conceallevel = 1 -- 0
+
+-- TODO:
+-- Fix markdown indentation settings
+-- vim.g.markdown_recommended_style = 0
+

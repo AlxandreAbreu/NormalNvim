@@ -597,6 +597,8 @@ maps.n["-"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
 maps.n["<Tab>"] = { "<cmd>b#<cr>", desc = "  Toggle with the last buffer" }
 maps.n["gb"] = { "<cmd>bprevious<cr>", desc = "  Go to previous buffer" }
 maps.n["gl"] = { "<cmd>b#<cr>", desc = " Toggle with the last buffer" }
+maps.n["g1"] = { "<cmd>bfirst<cr>", desc = "Go to the first buffer" }
+maps.n["g0"] = { "<cmd>blast<cr>", desc = "Go to the last buffer" }
 
 -- FIX: huge delay. see commands/keymaps
 -- Lags because gnn is bound to "Start selecting nodes with nvim-treesitter"
